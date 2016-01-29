@@ -1,0 +1,45 @@
+{% extends '../layout/default.html' %}
+{% import '../layout/commonMacros.html' as macros %}
+
+{% block head %}
+{% parent %}
+{% endblock %}
+
+{% block content %}
+
+<div class="widget widget-full wgreen">
+    <!-- Widget title -->
+    <div class="widget-head">
+        <div class="pull-left">Top 50 used tags</div>
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="widget-content no-border">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Index</th>
+                    <th>Tag</th>
+                    <th>Tagged count</th>
+                    <th>Owner</th>
+                </tr>
+            </thead>
+            {% for tagItem in list_data %}
+            <tr>
+                <td>{{loop.index}}</td>            
+                <td><a href="{{tagItem.search_link}}">{{tagItem.tagname}}</a></td>
+                <td>{{tagItem.count}}</td>
+                <td>{{macros.prepareUserView(tagItem)}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="widget-foot no-border">
+        <div class="clearfix"></div> 
+    </div>
+</div>
+
+{% endblock %}
+
+

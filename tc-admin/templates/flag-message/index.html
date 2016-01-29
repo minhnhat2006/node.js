@@ -1,0 +1,86 @@
+{% extends '../layout/default.html' %}
+{% import '../layout/commonMacros.html' as macros %}
+
+{% block head %}
+{% parent %}
+{% css %}
+pw/css/admin/v2/popbox.css
+{% endcss %}
+{% js %}
+pw/scripts/admin/v2/flag-message.js
+{% endjs %}
+{% endblock %}
+
+{% block content %}
+
+<div class="widget widget-full wgreen">
+    <!-- Widget title -->
+    <div class="widget-head">
+        <div class="pull-left">Messages Items</div>
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="widget-content no-border">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                <tr>
+                    <th>FROM</th>
+                    <th>TO</th>
+                    <th>Latest Message</th>
+                    <th width="80" class="center">Details</th>
+                </tr>
+                </tr>
+            </thead>
+            {% for item in data %}
+            <tr>
+                <td>{{macros.prepareUserView(item['from'])}}</td>
+                <td>{{macros.prepareUserView(item['to'])}}</td>
+                <td width='500'>{{item['latestmessages']}}</td> 
+                <td class="center">
+                    <input type="hidden" class="messagefrom" value="{{item['from']['id']}}"></input>
+                    <input type="hidden" class="messageto" value="{{item['to']['id']}}"></input>
+                    <input type="hidden" class="messages" value='{{item["messagesjson"]}}'></input>
+                    <a href="#"  alt="Unflag message" title="Unflag message" class="unflag-message"><i class="tc-icon tc-icon-remove"></i></a>
+                    <a href="#"  alt="Messages details" title="Messages details" class="messages-details{{loop.index}}"><i class="tc-icon tc-icon-cog"></i></a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+
+<!-- Begin Message details popup -->
+{% for item in data %}
+<div id="msg{{loop.index}}" class='details_msg_popup'>
+    <a class="b-close">x</a>
+    <div class="alert alert-info" style="margin:-18px -18px 18px -18px;border-radius:12px !important;">
+        <strong>Flag Message details</strong>
+    </div>
+    <div class="widget widget-full wgreen" style="max-height: 500px;overflow: auto">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                <tr>
+                    <th>FROM</th>
+                    <th>TO</th>
+                    <th>Message</th>
+                    <th width="80" class="center">Time Stamp</th>
+                </tr>
+                </tr>
+            </thead>
+            {% for message in item['messages'] %}
+            <tr>
+                <td>{{helper.ucfirst(item.from.name)}}</td>
+                <td>{{helper.ucfirst(item.to.name)}}</td>
+                <td width='500'>{{message['message']}}</td>
+                <td class="center">{{message['realtime']}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+{% endfor %}
+
+
+{% endblock %}

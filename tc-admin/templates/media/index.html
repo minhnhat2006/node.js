@@ -1,0 +1,61 @@
+{% extends '../layout/default.html' %}
+{% import '../layout/pagination.html' as pagination %}
+{% import '../layout/commonMacros.html' as macros %}
+
+{% block head %}
+{% parent %}
+{% js %}
+pw/scripts/admin/v2/media.js
+{% endjs %}
+{% endblock %}
+
+{% block content %}
+
+<div class="widget widget-full wgreen">
+    <!-- Widget title -->
+    <div class="widget-head">
+        <div class="pull-left">Media Items</div>
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="widget-content no-border">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th width=5><input type="checkbox" class="select-all" title=" Check all "></th>
+                    <th>Index</th>
+                    <th>Id</th>
+                    <th>User</th>
+                    <th>Media</th>
+                    <th>Type</th>
+                    <th width=10 class="center">Action</th>
+                </tr>
+            </thead>
+            {% for mediaItem in list_media %}
+            <tr>
+                <td>
+                    <input type="checkbox" class="media-select" media-id="{{mediaItem['id']}}" media-type="{{mediaItem['type']}}" owner-id="{{mediaItem['owner']['id']}}">
+                </td>
+                <td>{{loop.index}}</td>        
+                <td>{{mediaItem['id']}}</td>
+                <td>{{macros.prepareUserView(mediaItem['owner'])}}</td>
+                <td>{{macros.prepareMediaView(mediaItem)}}</td>
+                <td>{{mediaItem['type']}}</td>
+                <td class="center">
+                    <a href="#" title=" Delete " class="delete-media" media-id="{{mediaItem['id']}}" media-type="{{mediaItem['type']}}" owner-id="{{mediaItem['owner']['id']}}"><i class="tc-icon tc-icon-trash"></i></a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="widget-foot no-border">
+        {{pagination.paginationControl(data)}}
+        <div class="clearfix"></div> 
+    </div>
+</div>
+
+<div align=right style="margin: 10px 0px 10px 0px">
+    <button type='submit' class='btn btn-primary delete-selected-item'>Delete selected items</button>
+</div> 
+{% endblock %}

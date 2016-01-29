@@ -1,0 +1,9 @@
+<div class="btn-group" style="float: left;">
+    <button id="content-user" class="btn {% if is_user %}active{% endif %}" onclick="javascript:window.location = '/comment'">Select User{% if (is_media||is_comment) %}({{user['subpath']}}){% endif %}</button>
+    {% if (is_media||is_comment) %}
+    <button id="content-media" class="btn {% if is_media %}active{% endif %}" onclick="javascript:window.location = '/comment/media/user/{{user['user']}}'">Select Media{% if (is_comment) %}({{media['title']}}){% endif %}</button>
+    {% endif %}
+    {% if (is_comment) %}
+    <button id="content-comment" class="btn active">Comments</button>
+    {% endif %}
+</div>

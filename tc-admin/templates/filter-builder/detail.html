@@ -1,0 +1,354 @@
+{% extends '../layout/default.html' %}
+{% import '../layout/pagination.html' as pagination %}
+{% import '../layout/commonMacros.html' as macros %}
+{% block head %}
+{% parent %}
+{% css %}
+pw/css/admin/v2/filterbuilder.css
+{% endcss %}
+{% js %}
+pw/scripts/admin/v2/filterbuilder.js
+{% endjs %}
+{% endblock %}
+
+{% block content %}
+
+<input type="hidden" id="hdnId" value="{% if (data) %}{{data['id']}}{% endif %}">
+<input type="hidden" id="hdnType" value="{{type}}">
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="widget wgreen">
+            <div class="widget-head">
+                <div class="pull-left">Filter Builder</div>
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="widget-content">
+                <div class="padd">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-lg-12">Filter Name</label>
+                            <div class="col-lg-12">
+                                <input type="text" class="form-control" id="txtFilterName" value="{% if (data) %}{{data['name']}}{% endif %}" placeholder="Input Filter Name">
+                            </div>
+                        </div>
+
+                        <h6>Criteria</h6>
+                        <hr>
+
+                        <div class="form-group">
+                            <label class="col-lg-12">Filter Type</label>
+                            <div class="col-lg-12">
+                                <select size="2" class="form-control" id="txtFilterType">
+                                    <option>Content</option>
+                                    <option>User</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="divContentNewCriteria" style="display:none" criteria="0">
+                            <div class="form-group">
+                                <div class="col-lg-12 col-lg-2-next-5">
+                                    <label class="col-lg-2">First Criteria</label>
+                                    <label class="col-lg-2">&nbsp;</label>
+                                    <label class="col-lg-2">&nbsp;</label>
+                                    <label class="col-lg-2">&nbsp;</label>
+                                    <label class="col-lg-2">&nbsp;</label>
+                                </div>
+                                <div class="col-lg-12 col-lg-2-next-5">
+                                    <a href="#" title=" Remove Criteria Group" class="remove-first-criteria"><i class="tc-icon tc-icon-trash"></i></a>
+                                    <select multiple class="form-control col-lg-2 ctrl-first-criteria-content">
+                                        <option>Image</option>
+                                        <option>Video</option>
+                                        <option>Audio</option>
+                                        <option>Blog</option>
+                                    </select>
+                                    <button type="button" class="btn btn-primary btnAddCriteria">Add Criteria</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="divContentCriteria" style="display:none">
+                            <div class="form-group">
+                                <div class="col-lg-12 col-lg-2-next-5 label-field">
+                                    <label class="col-lg-2">First Criteria</label>
+                                    <label class="col-lg-2">Modifier Type</label>
+                                    <label class="col-lg-2">Modifier</label>
+                                    <label class="col-lg-2">&nbsp;</label>
+                                    <label class="col-lg-2">Modifier Value</label>
+                                </div>
+                                <div class="col-lg-12 col-lg-2-next-5">
+                                    <label class="col-lg-2 ctrl-first-criteria-content"></label>
+                                    <select class="form-control col-lg-2 modifer-type" size="4">
+                                        <option>Dates</option>
+                                        <option>Locations</option>
+                                    </select>
+                                    <div class="for-location">
+                                        <select class="form-control col-lg-2 ctrl-location-modifier" size="4">
+                                            <option selected>Near Me</option>
+                                            <option>City</option>
+                                            <option>State / Province</option>
+                                            <option>Country</option>
+                                            <option>Worldwide</option>
+                                        </select>
+                                        <select class="form-control col-lg-2 ctrl-location-compare" size="4">
+                                            <option>City</option>
+                                            <option>State</option>
+                                            <option>Country</option>
+                                        </select>
+                                        <select class="form-control col-lg-2 ctrl-location-country" style="display:none">
+                                            {% for item in countries %}
+                                            <option value="{{item['code']}}">{{item['name']}}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <select class="form-control col-lg-2 ctrl-location-state" style="display:none">
+                                            {% for item in states %}
+                                            <option value="{{item['ccode']}}/{{item['code']}}">{{item['cname']}} / {{item['name']}}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <input type="text" class="form-control col-lg-2 ctrl-location-value" placeholder="Input Location" style='display:none'>
+                                    </div>
+                                    <div class="for-date">
+                                        <select class="form-control col-lg-2 ctrl-date-modifier" size="4">
+                                            <option>Hours</option>
+                                            <option>Dates</option>
+                                            <option>Weeks</option>
+                                            <option>Months</option>
+                                            <option>Years</option>
+                                        </select>
+                                        <select class="form-control col-lg-2 ctrl-date-compare" size="4">
+                                            <option>></option>
+                                            <option><</option>
+                                        </select>
+                                        <input type="text" class="form-control col-lg-2 ctrl-date-value" placeholder="Input Time">
+                                        <select class="form-control col-lg-2 ctrl-date-value ctrl-date-hour" size="4" style="display:none">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                            <option>5</option>
+                                            <option>6</option>
+                                            <option>7</option>
+                                            <option>8</option>
+                                            <option>9</option>
+                                            <option>10</option>
+                                            <option>11</option>
+                                            <option>12</option>
+                                            <option>13</option>
+                                            <option>14</option>
+                                            <option>15</option>
+                                            <option>16</option>
+                                            <option>17</option>
+                                            <option>18</option>
+                                            <option>19</option>
+                                            <option>20</option>
+                                            <option>21</option>
+                                            <option>22</option>
+                                            <option>23</option>
+                                        </select>
+                                        <select class="form-control col-lg-2 ctrl-date-value ctrl-date-day" size="4" style="display:none">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                            <option>5</option>
+                                            <option>6</option>
+                                            <option>7</option>
+                                            <option>8</option>
+                                            <option>9</option>
+                                            <option>10</option>
+                                            <option>11</option>
+                                            <option>12</option>
+                                            <option>13</option>
+                                            <option>14</option>
+                                            <option>15</option>
+                                            <option>16</option>
+                                            <option>17</option>
+                                            <option>18</option>
+                                            <option>19</option>
+                                            <option>20</option>
+                                            <option>21</option>
+                                            <option>22</option>
+                                            <option>23</option>
+                                            <option>24</option>
+                                            <option>25</option>
+                                            <option>26</option>
+                                            <option>27</option>
+                                            <option>28</option>
+                                            <option>29</option>
+                                            <option>30</option>
+                                            <option>31</option>
+                                        </select>
+                                        <select class="form-control col-lg-2 ctrl-date-value ctrl-date-month" size="4" style="display:none">
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                            <option>5</option>
+                                            <option>6</option>
+                                            <option>7</option>
+                                            <option>8</option>
+                                            <option>9</option>
+                                            <option>10</option>
+                                            <option>11</option>
+                                            <option>12</option>
+                                        </select>
+                                    </div>
+                                    <a href="#" title=" Remove Criteria" class="remove-criteria"><i class="tc-icon tc-icon-minus"></i></a>
+                                </div>
+                            </div>
+
+                            <div class="form-group add-criteria">
+                                <div class="col-lg-12 col-lg-2-next-5">
+                                    <div class="col-lg-2">&nbsp;</div>
+                                    <select class="form-control col-lg-2 content-operator" id="txtConditionCriteria">
+                                        <option>AND</option>
+                                        <option>OR</option>
+                                    </select>
+                                    <button type="button" class="btn btn-primary btnAddCriteria">Add Criteria</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="divContent" style="display: none">
+                            <div class="form-group">
+                                <div class="col-lg-4">
+                                    <button type="button" class="btn btn-primary" id="btnAddNewContentCriteria">Add Content Criteria</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="divUser" style="display: none">
+                            <div id="divUserFirstCriteria">
+                                <div class="form-group">
+                                    <div class="col-lg-12 col-lg-2-next-5 label-field">
+                                        <label class="col-lg-2">First Criteria</label>
+                                        <label class="col-lg-2">Modifier Type</label>
+                                        <label class="col-lg-2">Modifier</label>
+                                        <label class="col-lg-2">&nbsp;</label>
+                                        <label class="col-lg-2">Modifier Value</label>
+                                    </div>
+                                    <div class="col-lg-12 col-lg-2-next-5">
+                                        <select class="form-control col-lg-2" size='4' id="txtFirstCriteriaUser">
+                                            <option>My Type</option>
+                                            <option selected>User Defined</option>
+                                        </select>
+                                        <label class="col-lg-2">&nbsp;</label>
+                                        <label class="col-lg-2">&nbsp;</label>
+                                        <label class="col-lg-2">&nbsp;</label>
+                                        <input type="text" class="form-control col-lg-2" id='txtUserTypeVal' placeholder="Input User Creativ Type">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group add-criteria">
+                                <div class="col-lg-12 col-lg-2-next-5">
+                                    <div class="col-lg-2">&nbsp;</div>
+                                    <select class="form-control col-lg-2 content-operator" id="txtConditionCriteria" style="display:none">
+                                        <option>AND</option>
+                                        <option>OR</option>
+                                    </select>
+                                    <button type="button" class="btn btn-primary btnAddUserCriteria">Add Criteria</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h6>Order Result by</h6>
+                        <hr>
+
+                        <div class="form-group">
+                            <div class="col-lg-12 col-lg-3-next">
+                                <select class="form-control col-lg-3 for-content" id="txtContentOrder">
+                                    <option value="">None</option>
+                                    <option value="">Most Inspired</option>
+                                    <option value="">Most Comments</option>
+                                    <option value="">Most Viewed</option>
+                                    <option value="">Newest</option>
+                                    <option value="">Oldest</option>
+                                </select>
+                                <select class="form-control col-lg-3 for-user" id="txtUserOrder">
+                                    <option value="">Most Embraced</option>
+                                    <option value="">Most Commented on</option>
+                                    <option value="">Most Inspired</option>
+                                </select>
+                                <select class="form-control col-lg-3" id="ctrlSelectOrder" style="display:none"></select>
+                            </div>
+                        </div>
+
+                        <h6>Query</h6>
+                        <hr>
+
+                        <div class="form-group">
+                            <label class="col-lg-12" id="lblFilter">Filter = {% if (data) %}{{data['value']}}{% endif %}</label>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-lg-4">
+                                <button type="button" class="btn btn-primary" id="btnSave">Save</button>
+                                <button type="button" class="btn btn-success" id="btnTest">Test Filter</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                {% if (content || users) %}
+                <div class="widget wgreen">
+                    <!-- Widget title -->
+                    <div class="widget-head">
+                        <div class="pull-left">Media Items</div>
+                        <div class="clearfix"></div>
+                    </div>
+
+                    <div class="widget-content no-border">
+                        <table class="table table-bordered" id="tblContent">
+                            {% if ( content) %}
+                            <thead>
+                                <tr>
+                                    <th>Index</th>
+                                    <th>Id</th>
+                                    <th>Media</th>
+                                    <th>Type</th>
+                                </tr>
+                            </thead>
+                            {% for mediaItem in content %}
+                            <tr>
+                                <td>{{loop.index}}</td>        
+                                <td>{{mediaItem['id']}}</td>
+                                <td>{{macros.prepareMediaView(mediaItem)}}</td>
+                                <td>{{mediaItem['type']}}</td>
+                            </tr>
+                            {% endfor %}
+                            {% endif %}
+
+                            {% if ( users) %}
+                            <thead>
+                                <tr>
+                                    <th>Index</th>
+                                    <th>Id</th>
+                                    <th>User</th>
+                                </tr>
+                            </thead>
+                            {% for user in users %}
+                            <tr>
+                                <td>{{loop.index}}</td>        
+                                <td>{{user['user']}}</td>
+                                <td>{{macros.prepareUserView(user)}}</td>
+                            </tr>
+                            {% endfor %}
+                            {% endif %}
+                        </table>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-lg-12" style="text-align:center">
+                        <button type="button" class="btn btn-success" id="btnLoadMore">Load More</button>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div> 
+    </div>
+</div>
+
+{% endblock %}

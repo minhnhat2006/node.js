@@ -1,0 +1,25 @@
+{% macro paginationControl(data) %}
+
+{% if data['pageCount'] > 0 %}
+<div class="pagination-centered">
+    <ul class="pagination">
+        {% if data['previous'] %}
+        <li><a href="{{data['prev_url']}}"><<</a></li>
+        {% endif %}
+
+        {% for page in data['pagesInRange'] %}
+        {% if data['current'] !== page['index'] %}
+        <li><a href="{{page['url']}}">{{page['index']}}</a></li>
+        {% else %}
+        <li class="disabled"><a>{{page['index']}}</a></li>
+        {% endif %}
+        {% endfor %}
+
+        {% if data['next'] %}
+        <li><a href="{{data['next_url']}}">>></a></li>
+        {% endif %}
+    </ul>
+</div>
+{% endif %}
+
+{% endmacro %}

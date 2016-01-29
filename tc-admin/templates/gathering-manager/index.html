@@ -1,0 +1,139 @@
+{% extends '../layout/default.html' %}
+{% import '../layout/pagination.html' as pagination %}
+{% import '../layout/commonMacros.html' as macros %}
+
+{% block head %}
+{% parent %}
+{% css %}
+pw/css/admin/v2/popbox.css
+pw/css/admin/v2/gather.css
+{% endcss %}
+
+{% js %}
+pw/scripts/admin/v2/gathering-manager.js
+{% endjs %}
+{% endblock %}
+
+{% block content %}
+<script type="text/javascript">
+    <!--//
+    function change() {
+        document.filterform.submit();
+    }
+
+
+    //-->
+</script>
+
+<div class="widget widget-full wgreen">
+    <!-- Widget title -->
+    <div class="widget-head">
+        <div class="pull-left" style="margin-top:5px">Gathering Manager</b></div>
+        <div class="pull-right">
+            <form action='/gathering-manager' method='GET' name="filterform" target="_self">
+                <div align=right class="form-group">
+                    <select name="featured_gather" id="gathering_feature" class="gathering-feature" onChange="change();">
+                        <option value="">Select</option>
+                        <option value="0">All</option>
+                        <option value="1">Featured</option>
+                    </select>
+                    <input type="text" name="s_gather" size=30 value="{{s_gather}}" class="form-control gather-search" placeholder="Type gather name">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+            </form>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="widget-content no-border">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th width="120">Gathering Id</th>
+                    <th width="200">Thumbnail</th>
+                    <th width="150">Manager gathering</th>
+                    <th width="5">Featured</th>
+                    <th>Created</th>
+                    <th>Owner</th>
+                    <th>Members</th>
+                    <th width="70">Action</th>
+                </tr>
+            </thead>
+            {% for item in data['data'] %}
+            <tr>
+                <td>{{item['id']}}</td>
+                <td>{{macros.prepareGroupView(item)}}</td>
+                <td style="text-align:center">
+                    <a href="#"  alt="Staff Owner" title="Staff Owner" class="base-number-user">
+                        <input type="hidden" class="manager-groupid" value="{{item['id']}}"></input>
+                        <input type="hidden" class="base-number{{item['id']}}" value="{{item['base_number']}}"></input>
+                        <i class="tc-icon tc-icon-star" style="opacity:{%if (item['tallcat_staff'] == 1) %}1{% endif %}; {%if (item['tallcat_staff'] == 0) %} visibility: hidden{%endif%}"></i>
+                    </a>
+                </td>
+                <td style="text-align:center"><input type="checkbox" {%if item['feature'] %} checked="checked" {%endif%} name="data[]" value="{{item['id']}}" class="chk-feature{{item['id']}}"></td>
+                <td>{{item['g_created']}}</td>
+                <td>
+                    <a class='owner-name' href="{{item['portal']}}" >{{item['name']}}</a>
+                </td>
+                <td>{{item['counter']}}</td>
+
+                <td>
+                    <input type="hidden" class="groupId" value="{{item['id']}}"></input>
+                    <input type="hidden" class="groupOwner" value="{{item['user']}}"></input>
+                    <a href="#"  alt="Send message to owner" title="Send message to owner" class="send-message{{item['user']}}"><i class="tc-icon tc-icon-envelope"></i></a>
+                    <!--<a href="#"  alt="Unreport item" title="Unreport item" class="unreport-group"><i class="tc-icon tc-icon-remove"></i></a>-->
+                    <a href="#"  alt="Delete item" title="Delete item" class="delete-reported-group"><i class="tc-icon tc-icon-trash"></i></a>
+                    <a href="#"  alt="Mark as mature content" mature='{{item['is_mature_content']}}' title="{% if (item['is_mature_content']!=0) %}Un-Mark mature content{% else %}Mark mature content{% endif %}" class="mark-mature-group">
+                       <i class="tc-icon tc-icon-flag" style="opacity:{% if (item['is_mature_content']!=0) %}1{% else %}0.4{% endif %}"></i>
+                    </a>
+
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="widget-foot no-border">
+        {{pagination.paginationControl(data)}}
+        <div class="clearfix"></div> 
+    </div>
+</div>
+
+<!-- Begin Compose Message popup -->
+<div id="compose_msg_pop_up">
+    <a class="b-close">x</a>
+    <div class="alert alert-info" style="margin:-18px -18px 18px -18px;border-radius:12px !important;">
+        <strong>New Message</strong>
+    </div>
+    <h4>To: <span id="mm_compose_name"></span></h4>
+    <textarea rows="15" cols="50" id="mm_compose_txt" style="width:500px;margin-left:-10px;margin-right:-10px;"></textarea>
+    <div class="alert" style="margin:-8px -18px -18px -18px;border-radius:12px !important;background-color:white">
+        <button type='button' id="btn_send" class='btn btn-primary'>Send</button>
+    </div>
+    <input type="hidden" value="" id="mm_compose_id"/>
+</div>
+<!-- End Compose Message popup -->
+<!-- Begin Edit popup -->
+<div id="settings_pop_up">
+    <a class="b-close">x</a>
+    <h6>Set base number of users </h6>
+    <form class="form-inline" style="margin-left:0px">
+        <div class="form-group">
+            <div class="settings-info">
+                <div class="show-inline">
+                    <div class="number-pieces">
+                        <div class="pull-left string">Base number of users : </div> 
+                        <input id="t_base_numbers" type="text" value='0' name="t_base_numbers" class="form-control input-number" placeholder="Input number">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="button-update">
+            <button type='submit' id="update_numbers" class='btn btn-info' >Update</button>
+        </div>
+        <input type="hidden" value="" id="group_id"/>
+
+    </form>
+</div>
+<!-- End Edit popup -->
+{% endblock %}

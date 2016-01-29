@@ -1,0 +1,71 @@
+{% extends '../layout/default.html' %}
+{% import '../layout/pagination.html' as pagination %}
+{% import '../layout/commonMacros.html' as macros %}
+
+{% block head %}
+{% parent %}
+{% css %}
+bobafett/vendor/blueimp/css/jquery.fileupload-ui.css
+pw/css/admin/v2/magazine.css
+{% endcss %}
+{% js %}
+bobafett/vendor/blueimp/js/load-image.min.js
+bobafett/vendor/blueimp/js/canvas-to-blob.min.js
+bobafett/vendor/blueimp/js/tmpl.min.js
+bobafett/vendor/blueimp/js/jquery.iframe-transport.js
+bobafett/vendor/blueimp/js/jquery.fileupload.js
+bobafett/vendor/blueimp/js/jquery.fileupload-fp.js
+bobafett/vendor/blueimp/js/jquery.fileupload-ui.js
+bobafett/vendor/blueimp/js/locale.js
+pw/scripts/admin/v2/magazine.js
+{% endjs %}
+{% endblock %}
+
+{% block content %}
+
+
+<form method="POST" action="/magazine/add-cover" id='frmCover'>
+    <div class="add-mgz-cover-container">
+        <div class="flag-issue">Issue</div>
+        <div class="perimeters">
+            <input type="hidden" name='id' value="{{data['id']}}" />
+
+            <input type="text" id='title' name='title' class="issue-title" placeholder="Issue Title" value="{{data['title']}}"/>
+
+            <textarea id='about' name='about' class="issue-desc" placeholder="Issue Description">{{data['about']}}</textarea>
+
+            <h6>Subscribe now:</h6>
+            <textarea id='subscribe' name='subscribe' class="issue-subscribe" placeholder="Subscribe now">{{data['subscribe_url']}}</textarea>
+
+            <h6>Purchase:</h6>
+            <input type="text" id='purchase' name='purchase' class="issue-purchase" placeholder="Purchase" value="{{data['purchase_url']}}" />
+
+            <h6>Read on issuu:</h6>
+            <input type="text" id='embed' name='embed' class="issue-read-on-issuu" placeholder="Read on issuu" value="{{data['embed_id']}}" />
+        </div>
+
+        <div class="cover" id='btnUploadCover'>
+            <span><i class='icon-picture'></i>Upload cover picture</span>
+            <input type="file" id="file-media" name="media" accept="image/x-png, image/gif, image/jpeg">
+            <input type="hidden" name='cover' id='hdnCover'>
+        </div>
+
+        <div class="preview-cover" id="coverPreview" style="background-image: url('{{data['cover']}}'); display: block;">
+            <div id="remove-previewer" title="Remove Image">
+                <i class="icon icon-minus-sign"></i>
+            </div>
+        </div>
+    </div>
+
+    <div align=right style="margin: 10px 0px 10px 0px">
+        <button type='reset' class='btn btn-cancel'>Cancel</button>
+        <button type="button" class='btn btn-default'>View Content</button>
+        <button type='submit' id='btnSaveCover' class='btn btn-primary'>Save Cover</button>
+    </div> 
+</form>
+
+<script type="text/javascript">
+    window.creativToken = '{{token}}';
+</script>
+
+{% endblock %}

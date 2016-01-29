@@ -1,0 +1,67 @@
+{% extends '../layout/default.html' %}
+
+{% block head %}
+{% parent %}
+{% js %}
+pw/scripts/admin/v2/blog.js
+{% endjs %}
+{% endblock %}
+
+{% block content %}
+
+<input type="hidden" name="blogpsid" value="{{data['blogpsid']}}">
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="widget wgreen">
+            <div class="widget-head">
+                <div class="pull-left">Blog <em>{{data['title']}}</em> - <b>{{data['owner']['realname']}}</b></div>
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="widget-content">
+                <div class="padd">
+                    <!-- Form starts. -->
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label class="col-lg-4 control-label">Title</label>
+                            <div class="col-lg-10">
+                                <input type="text" id="title-field" class="form-control" value="{{data['title']}}" name="title" placeholder="Blog Title">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-4 control-label">Content</label>
+                            <div class="col-lg-10">
+                                <textarea class="form-control" name="cntn_value" placeholder="Blog Content">{{data['postcntn']}}</textarea>
+                            </div>
+                        </div>  
+                        <hr>
+                        <div class="form-group">
+                            <div class="col-lg-offset-1 col-lg-9">
+                                <button type="reset" class="btn btn-default" onclick="window.location.href = '/blog';" >Back</button>
+                                <button type="button" class="btn btn-primary" id='btnSave'>Save</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="widget-foot">
+                <!-- Footer goes here -->
+            </div>
+        </div> 
+    </div>
+</div>
+
+<script>
+                                    window.CKEDITOR_BASEPATH = '{{STATIC_BASE}}/pw/scripts/admin/ckeditor/';
+
+                                    window.onload = function() {
+                                        CKEDITOR.config.entities = false;
+                                        CKEDITOR.config.entities_greek = false;
+                                        CKEDITOR.resize_enabled = true;
+                                        CKEDITOR.replace('cntn_value', {toolbarStartupExpanded: false, height: '400px'});
+                                    };
+</script>
+
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends '../layout/default.html' %}
+{% import '../layout/commonMacros.html' as macros %}
+
+{% block head %}
+{% parent %}
+{% js %}
+pw/scripts/admin/v2/flag-queue.js
+{% endjs %}
+{% endblock %}
+
+{% block content %}
+
+<div class="widget widget-full wgreen">
+    <!-- Widget title -->
+    <div class="widget-head">
+        <div class="pull-left">Media Items</div>
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="widget-content no-border">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                <tr>
+                    <th width="80">Media id</th>
+                    <th>Thumbnail</th>
+                    <th width="120">{% if (order==='asc')%}<a style='color: #333' href='/flag-queue/index/order/desc'>Flag count <i class='tc-icon-circle-arrow-down'></i></a>
+                        {%else%}<a style='color: #333' href='/flag-queue/index/order/asc'>Flag count <i class='tc-icon-circle-arrow-up'></i></a>{%endif%}</th>
+                    <th width="80" class="center">Action</th>
+                </tr>
+                </tr>
+            </thead>
+            {% for item in data %}
+            <tr>
+                <td>{{item['id']}}</td>
+                <td>{{macros.prepareMediaView(item)}}</td>
+                <td>{{item['flag_count']}}</td>
+                <td class="center">
+                    <input type="hidden" class="mediaType" value="{{item['type']}}"></input>
+                    <input type="hidden" class="mediaOwner" value="{{item['user']}}"></input>
+                    <a href="#"  alt="Unflag item" title="Unflag item" class="unflag-media"><i class="tc-icon tc-icon-remove"></i></a>
+                    <a href="#"  alt="Delete item" title="Delete item" class="delete-flagged-media"><i class="tc-icon tc-icon-trash"></i></a>
+                    <a href="#"  alt="Mark as mature content" mature='{{item['mature']}}' title="{% if (item['mature']!=0) %}Un-Mark mature content{% else %}Mark mature content{% endif %}" class="mark-mature-media">
+                       <i class="tc-icon tc-icon-flag" style="opacity:{% if (item['mature']!=0) %}1{% else %}0.4{% endif %}"></i>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+
+{% endblock %}

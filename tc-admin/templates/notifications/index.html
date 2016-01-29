@@ -1,0 +1,26 @@
+{% extends '../layout/default.html' %}
+{% import '../layout/pagination.html' as pagination %}
+{% import '../layout/commonMacros.html' as macros %}
+
+{% block head %}
+{% parent %}
+{% css %}
+pw/css/admin/v2/popbox.css
+{% endcss %}
+{% js %}
+pw/scripts/admin/v2/notifications.js
+{% endjs %}
+{% endblock %}
+
+{% block content %}
+
+<div class="alert alert-info" style="margin:-18px -18px 18px -18px;border-radius:12px !important;">
+    <strong>New Message</strong>
+</div>
+<h4>To: <span id="mm_compose_name" >All Creativs<span style="font-size: 14px;">({{ notifications_user }} members)</span></span></h4>
+<textarea rows="15" cols="50" id="mm_compose_txt" style="width:100%;margin-left:-10px;margin-right:-10px;"></textarea>
+<div class="alert" style="margin:-8px -18px -18px -18px;border-radius:12px !important;background-color:white">
+    <button type='button' id="btn_send" class='btn btn-primary'>Send</button>
+</div>
+
+{% endblock %}

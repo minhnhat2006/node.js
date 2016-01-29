@@ -1,0 +1,22 @@
+{% import '../layout/commonMacros.html' as macros %}
+
+{% if ( content) %}
+{% for mediaItem in content %}
+<tr>
+    <td>{{loop.index + itemIndex}}</td>        
+    <td>{{mediaItem['id']}}</td>
+    <td>{{macros.prepareMediaView(mediaItem)}}</td>
+    <td>{{mediaItem['type']}}</td>
+</tr>
+{% endfor %}
+{% endif %}
+
+{% if ( users) %}
+{% for user in users %}
+<tr>
+    <td>{{loop.index + itemIndex}}</td>        
+    <td>{{user['user']}}</td>
+    <td>{{macros.prepareUserView(user)}}</td>
+</tr>
+{% endfor %}
+{% endif %}

@@ -1,0 +1,40 @@
+{% extends '../layout/default.html' %}
+
+{% block head %}
+{% parent %}
+{% endblock %}
+
+{% block content %}
+
+<form id="registration_form" class="pull-right form-inline" method="GET" action="/stats/registration-hour">
+    <div align="right">
+        <span>From: </span>
+        <span><input id="date-from" name="from" class="datepicker input-small" type="text" data-date-format="dd-mm-yyyy" value="{{from}}"></span>
+        <span>&nbsp;&nbsp;To: </span>
+        <span><input id="date-to" name="to" class="datepicker input-small" type="text" data-date-format="dd-mm-yyyy" value="{{to}}"></span>
+        <button id="reg-search-date" class="btn" type="submit">Search</button>
+    </div>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Date</th>
+            {% for hour in list_hour %}
+                <th>Hour {{hour}}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    {% for item in list %}
+        <tr>
+            <td>{{loop.key}}</td>
+            {% for index in list_hour %}
+                {% if item[index]%}
+                <th style="color:blue">{{item[index]}}</th>
+                {% else %}
+                <th>0</th>
+                {% endif %}                
+            {% endfor %}            
+        </tr>
+    {% endfor %}
+</table>
+{% endblock %}

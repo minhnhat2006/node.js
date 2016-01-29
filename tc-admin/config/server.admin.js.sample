@@ -1,0 +1,8 @@
+module.exports = {
+    mode: 'staging',
+    port: 40000,
+    redis: {host: '10.72.89.135', port: 6379},
+    api: {host: 'api.creativ.com'},
+    stats: {g_img: {url: 'https://slack-files.com/files-tmb/T029AHMRZ-F02LS5D0E-9105f3/line_chart_360.png', token: ''}},
+    STATIC_BASE: 'http://static.tallcatqa.com'
+};

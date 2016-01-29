@@ -1,0 +1,88 @@
+{% extends '../layout/default.html' %}
+{% import '../layout/pagination.html' as pagination %}
+{% import '../layout/commonMacros.html' as macros %}
+
+{% block head %}
+{% parent %}
+{% css %}
+pw/css/admin/v2/user.css
+pw/css/admin/v2/popbox.css
+{% endcss %}
+{% js %}
+pw/scripts/admin/v2/collection.js
+{% endjs %}
+{% endblock %}
+
+{% block content %}
+<div class="widget widget-full wgreen">
+    <!-- Widget title -->
+ 
+    <div class="widget-content no-border">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Index</th>
+                    <th width="250">User</th>        
+                    <th>User status</th>
+                    <th>User type</th>
+                    <th><a href="#" class="sort-by-created" >User created {%if (sort==='created')%}<i class = 'tc-icon tc-icon-chevron-{{arrow}}'></i>{%endif%}</a></th>
+                    <th><a href="#" class="sort-by-lastlogin"  >User last login {%if (sort==='lastlogin')%}<i class = 'tc-icon tc-icon-chevron-{{arrow}}'></i>{%endif%} </a></th>
+                    <th><a href="#" class="sort-by-lastupdate" >User last update {%if (sort==='lastupdate')%}<i class = 'tc-icon tc-icon-chevron-{{arrow}}'></i>{%endif%}</a></th>
+                    <th width="70">Action</th>
+                </tr>
+            </thead>
+            {% for item in data['data'] %}
+            <tr>
+                <td>{{loop.index}}</td>
+                <td>{{macros.prepareUserView(item)}}</td>
+                <td>{{item['user_status']}}</td>
+                <td>{{item['user_type']}}</td>
+                <td>{{item['user_created']}}</td>
+                <td>{{item['user_last_login']}}</td>
+                <td>{{item['user_last_update']}}</td>
+                <td>
+                    <a href="/collection/collections-show/user/{{item['user']}}"  alt=" Collections manager" title=" Collections manager "><i class="tc-icon tc-icon-book"></i></a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="widget-foot no-border">
+        {{pagination.paginationControl(data)}}
+        <div class="clearfix"></div> 
+    </div>
+</div>
+
+<!-- Element to pop up -->
+<div id="element_to_pop_up" class="add-user">
+    <a class="b-close">x</a>
+    <input type="hidden" id="p_userid"/>
+    <div class="alert alert-info"><h6>User <b><span id="p_username"></span></b></h6></div>
+    <h6 style="margin-bottom: 0px">Select Mass Mailer list(s), then click to <button type='button' id="add_mm" class='btn btn-info'>Add</button></h6>
+    <div id="d_avail_mm_list">
+        <table id="avail_mm_list" class="table">
+            <thead>
+                <tr>
+                    <th width="20px"><input type="checkbox" id="chk_notin_mm"></th>
+                    <th>List Name</th>
+                    <th width="165">Number of Members</th>        
+                </tr>
+            </thead>
+        </table>
+    </div>
+    <h6 style="margin-bottom: 0px">Already in Mass Mailer list(s) below. Select Mass Mailer list(s) and click to <button type='button' id="remove_mm" class='btn btn-info'>Remove</button></h6>
+    <div id="d_in_mm_list">
+        <table id="in_mm_list" class="table">
+            <thead>
+                <tr>
+                    <th width="20px"><input type="checkbox" id="chk_in_mm"></th>
+                    <th>List Name</th>
+                    <th width="165">Number of Members</th>        
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

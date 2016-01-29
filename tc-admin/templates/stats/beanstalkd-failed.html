@@ -1,0 +1,55 @@
+{% extends '../layout/default.html' %}
+
+{% block head %}
+{% parent %}
+{% css %}
+pw/css/admin/v2/stats.css
+{% endcss %}
+{% endblock %}
+
+{% block content %}
+
+<div class="widget widget-full wgreen">
+    <!-- Widget title -->
+    <div class="widget-head">
+        <div class="pull-left" style="margin-top:5px">BeansTalkD failed job by day</div>
+        <div class="pull-right">
+            <form method='GET' id="upload_option_form" action="/stats/beanstalkd-failed">
+                <div align=right class="form-group">
+                    <select name="date" class="form-control user-search">
+                        <option value="">All</option>
+                        {% for date in list_date %}
+                        <option value="{{date}}">{{date}}</option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit" class="btn btn-primary">OK</button>
+                </div>
+            </form>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="widget-content no-border">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Job ID</th>
+                    <th>Meta</th>
+                </tr>
+            </thead>
+            {% for item in data %}
+            <tr>
+                <td>{{data['job']}}</td>
+                <td>{{data['data']}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="widget-foot no-border">
+        <div class="clearfix"></div> 
+    </div>
+</div>
+{% endblock %}
+
+

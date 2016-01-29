@@ -1,0 +1,171 @@
+<html>
+    <head>
+        <title>Report - Admin Control Panel</title>
+        <link rel='shortcut icon' href='{{STATIC_BASE}}/pw/images/favicon.ico'/>
+
+        <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css"/>
+        <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.2.0/css/datepicker.min.css"/>
+    </head>
+    <body>
+        <div style="border-bottom: 1px solid #ccc;padding: 20px;margin-bottom: 20px">
+            <div class="pull-left">
+                <a href="/report/country-list">Country List</a>&nbsp;|&nbsp;
+                <a href="/report/country-growth">Country Growth</a>
+            </div>
+            <div class="pull-right">
+                <form method="get" action="/report">
+                    From: <input id="date-from" data-provide="datepicker" name="from" class="datepicker input-small" size="16" type="text" data-date-format="mm/dd/yyyy" value="{{dateFrom}}">
+                    To: <input id="date-to" data-provide="datepicker" name="to" class="datepicker input-small" size="16" type="text" data-date-format="mm/dd/yyyy" value="{{dateTo}}">
+                    <button class="btn btn-primary" type="submit">Show</button>
+                </form>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div>
+            <div  id="chart_daily_reg" style="float:left;width: 850px; height: 500px;"></div>
+            <div  id="chart_daily_vel" style="float:left;width: 500px; height: 500px;"></div>
+            <div id="chart_daily_view" style="float:left;width: 500px; height: 500px;"></div>
+        </div>
+        <div>
+
+            <div id="chart_total_reg" style="float:left;width: 400px; height: 500px;"></div>
+            <div id="chart_interaction" style="float:left;width: 900px; height: 500px;"></div>
+            <div id="chart_reg_content" style="float:left;width: 450px; height: 500px;"></div>
+        </div>
+        <div >
+            <div id="chart_total_content" style="float:left;width: 850px; height: 500px;"></div>
+            <div id="chart_bar_hour" style="float:left;width: 500px; height: 500px;"></div>
+            <div id="chart_media_percent" style="float:left;width: 500px; height: 500px;"></div>
+        </div>
+        <div >
+            <div id="chart_geo" style="clear:both;float:left;width: 1200px; height: 500px;"></div>
+            <div style="clear:both"></div>
+        </div>
+        <div>
+            <div id="chart_div" style="float:left;width: 600px; height: 500px;"></div>
+            <div id="chart_country_reg" style="float:left;width: 600px; height: 500px;"></div>
+            <div id="chart_country_med" style="float:left;width: 600px; height: 500px;"></div>
+        </div>
+        <div>
+            <div id="chart_total_reg_type" style="float:left;width: 600px; height: 500px;"></div>
+            <div id="chart_today_reg_type" style="float:left;width: 600px; height: 500px;"></div>
+        </div>
+
+
+        <script type='text/javascript' src='http://codeorigin.jquery.com/jquery-1.10.2.min.js'></script>
+        <script type='text/javascript' src='//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js'></script>
+        <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.2.0/js/bootstrap-datepicker.min.js'></script>
+        <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+        <script type="text/javascript">
+            google.load("visualization", "1", {packages: ["corechart", "geochart"]});
+            google.setOnLoadCallback(drawChart);
+
+            function drawChart() {
+                makeComboChart('chart_daily_reg', 'Daily Registration', {{ JSON.stringify(dailyReg)}}, 'area', {1: {type: 'line'}});
+                makeChart('chart_daily_vel', 'Registration/Login Velocity', {{ JSON.stringify(dailyVel)}});
+                makeComboChart('chart_daily_view', 'Daily Page View', {{ JSON.stringify(pageView)}}, 'bars', {0: {color: '#ccc'}, 1: {type: 'line'}});
+                makeChart('chart_total_reg', 'Total Registration', {{ JSON.stringify(totalReg)}});
+                makeChart('chart_total_reg_type', 'Total Registration by Type', {{ JSON.stringify(totalRegType)}});
+                makeChart('chart_today_reg_type', 'Daily Registration by Type', {{ JSON.stringify(todayRegType)}});
+                makeChart('chart_interaction', 'Content Interactions', {{ JSON.stringify(interaction)}});
+                makeComboChart('chart_reg_content', 'Registration to Content', {{ JSON.stringify(regContent)}}, 'bars', {0: {color: '#ccc'}, 1: {type: 'line'}});
+                makeChartArea('chart_total_content', 'Total Content', {{ JSON.stringify(totalContent)}});
+                drawRegionsMap('chart_geo', {{ JSON.stringify(countryGeo)}});
+                makeColumnChart('chart_bar_hour', 'Hourly Registration (GMT+0)', {{ JSON.stringify(hourData)}});
+                makeColumnChart('chart_media_percent', 'Media Stats - # of Media viewed, inspired and commented', {{ JSON.stringify(mediaData)}}, true);
+
+                var data = google.visualization.arrayToDataTable({{ JSON.stringify(chartData)}});
+                var options = {
+                    title: 'Site Stats',
+                    vAxes: {0: {logScale: false},
+                        1: {logScale: false, maxValue: 500000}},
+                    series: {
+                        0: {targetAxisIndex: 1},
+                        1: {targetAxisIndex: 0},
+                        2: {targetAxisIndex: 0},
+                        3: {targetAxisIndex: 0}}
+                };
+
+                var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+                chart.draw(data, options);
+
+                // ========================== Country REG ==================================
+                var data2 = google.visualization.arrayToDataTable({{ JSON.stringify(countryReg)}});
+                var options = {
+                    title: 'Regisration Top Country'
+                };
+
+                var chart2 = new google.visualization.LineChart(document.getElementById('chart_country_reg'));
+                chart2.draw(data2, options);
+
+                // ========================== Country Content ==================================
+                var data3 = google.visualization.arrayToDataTable({{ JSON.stringify(countryMedia)}});
+                var options = {
+                    title: 'Content Top Country'
+                };
+
+                var chart3 = new google.visualization.LineChart(document.getElementById('chart_country_med'));
+                chart3.draw(data3, options);
+            }
+
+            function makeColumnChart(id, title, data, stacked) {
+                var theData = google.visualization.arrayToDataTable(data);
+                var theOptions = {
+                    title: title,
+                    legend: {position: 'top'},
+                    chartArea: {left: 50, top: 40, width: "80%", height: "60%"},
+                    isStacked: (stacked ? true : false)
+                };
+
+                var theChart = new google.visualization.ColumnChart(document.getElementById(id));
+                theChart.draw(theData, theOptions);
+            }
+
+            function makeComboChart(id, title, data, type, series) {
+                var data4 = google.visualization.arrayToDataTable(data);
+                var options = {
+                    title: title,
+                    seriesType: type,
+                    series: series,
+                    chartArea: {left: 50, top: 40, width: "80%", height: "60%"},
+                    legend: {position: 'top'}
+                };
+
+                var chart4 = new google.visualization.ComboChart(document.getElementById(id));
+                chart4.draw(data4, options);
+            }
+
+            function makeChart(id, title, data) {
+                var theData = google.visualization.arrayToDataTable(data);
+                var theOptions = {
+                    title: title,
+                    legend: {position: 'top'},
+                    chartArea: {left: 50, top: 40, width: "80%", height: "60%"}
+                };
+
+                var theChart = new google.visualization.LineChart(document.getElementById(id));
+                theChart.draw(theData, theOptions);
+            }
+
+            function makeChartArea(id, title, data) {
+                var theData = google.visualization.arrayToDataTable(data);
+                var theOptions = {
+                    title: title,
+                    legend: {position: 'top'},
+                    chartArea: {left: 50, top: 40, width: "80%", height: "60%"}
+                };
+
+                var theChart = new google.visualization.AreaChart(document.getElementById(id));
+                theChart.draw(theData, theOptions);
+            }
+
+            function drawRegionsMap(id, data) {
+                var data = google.visualization.arrayToDataTable(data);
+                var theOptions = {};
+
+                var chart = new google.visualization.GeoChart(document.getElementById(id));
+                chart.draw(data, theOptions);
+            }
+        </script>
+    </body>
+</html>

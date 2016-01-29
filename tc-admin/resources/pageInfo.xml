@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<pages>
+    <page id ='login'>
+        <action id='index'>
+            <title>Login</title>
+            <desc>Login</desc>
+            <path>/login</path>
+            <prev></prev>
+        </action>
+    </page>
+    
+    <page id ='index'>
+        <action id='index'>
+            <title>Home</title>
+            <desc>Home</desc>
+            <path>/</path>
+            <prev></prev>
+        </action>
+    </page>
+        
+    <page id ='approval'>
+        <action id='index'>
+            <title>Waiting for Approval</title>
+            <desc>Waiting for Approval</desc>
+            <path>/approval</path>
+            <prev></prev>
+        </action>
+    </page>
+        
+    <page id ='blog'>
+        <action id='index'>
+            <title>Blog Manager</title>
+            <desc>Blog Manager</desc>
+            <path>/blog/index/page/{{page}}</path>
+            <prev></prev>
+        </action>
+        <action id='edit'>
+            <title>Edit Blog</title>
+            <desc>Edit Blog: title, content</desc>
+            <path>/blog/edit</path>
+            <prev>index</prev>
+        </action>
+    </page>
+        
+    <page id ='comment'>
+        <action id='index'>
+            <title>Select User</title>
+            <desc>Select a user to list media items</desc>
+            <path>/comment/index/q/{{q}}/user_status/{{user_status}}/user_type/{{user_type}}/page/{{page}}</path>
+            <prev></prev>
+        </action>
+        <action id='media'>
+            <title>Select Media</title>
+            <desc>Select a media to list all comments</desc>
+            <path>/comment/media/user/{{user}}/page/{{page}}</path>
+            <prev>index</prev>
+        </action>
+        <action id='comment'>
+            <title>Comment Manager</title>
+            <desc>All comments on media item</desc>
+            <path>/comment/comment/user/{{user}}/media/{{media}}/mtype/{{mtype}}</path>
+            <prev>media</prev>
+        </action>
+        <action id='edit'>
+            <title>Edit Comment</title>
+            <desc>Edit comment's content</desc>
+            <path>/comment/edit/user/{{user}}/media/{{media}}/mtype/{{mtype}}/key/{{key}}</path>
+            <prev>comment</prev>
+        </action>
+    </page>
+        
+    <page id ='change'>
+        <action id='index'>
+            <title>Wristband Registration</title>
+            <desc>Wristband Registration</desc>
+            <path>/change/page/{{page}}</path>
+            <prev></prev>
+        </action>
+    </page>
+        
+    <page id ='console'>
+        <action id='index'>
+            <title>Rest API</title>
+            <desc>Call Rest APIs</desc>
+            <path>/console</path>
+            <prev></prev>
+        </action>
+        <action id='get-token'>
+            <title>Rest API - Get Token</title>
+            <desc>Get access token</desc>
+            <path>/console/get-token</path>
+            <prev>index</prev>
+        </action>
+    </page>
+        
+    <page id ='filter-builder'>
+        <action id='index'>
+            <title>Filter Builder Manager</title>
+            <desc>Filter Builder Manager</desc>
+            <path>/filter-builder/index/page/{{page}}</path>
+            <prev></prev>
+        </action>
+        <action id='detail'>
+            <title>Filter Builder</title>
+            <desc>Filter Builder</desc>
+            <path>/filter-builder/detail</path>
+            <prev>index</prev>
+        </action>
+    </page>
+        
+    <page id ='flag-queue'>
+        <action id='index'>
+            <title>Flag Queue</title>
+            <desc>List all Flag Queue items</desc>
+            <path>/flag-queue</path>
+            <prev></prev>
+        </action>
+    </page>
+    
+    <page id ='flag-message'>
+        <action id='index'>
+            <title>Flag Messages</title>
+            <desc>List all Flag Messages items</desc>
+            <path>/flag-message</path>
+            <prev></prev>
+        </action>
+    </page>
+        
+    <page id ='staff-pick'>
+        <action id='index'>
+            <title>Staff Pick</title>
+            <desc>List all Staff Pick items</desc>
+            <path>/staff-pick</path>
+            <prev></prev>
+        </action>
+    </page>
+    
+    <page id ='creative-movement'>
+        <action id='index'>
+            <title>Creative Movement Inspired</title>
+            <desc>List all Creative Movement Inspired</desc>
+            <path>/creative-movement</path>
+            <prev></prev>
+        </action>
+    </page>
+    <page id ='gathering-manager'>
+        <action id='index'>
+            <title>Gathering Manager</title>
+            <desc>List all Gathering items</desc>
+            <path>/gathering-manager</path>
+            <prev></prev>
+        </action>
+    </page>
+    <page id ='gathering-reported'>
+        <action id='index'>
+            <title>Gathering Reported</title>
+            <desc>List all Gathering reported items</desc>
+            <path>/gathering-reported</path>
+            <prev></prev>
+        </action>
+    </page>
+    <page id ='user'>
+        <action id='index'>
+            <title>User Manager</title>
+            <desc>Manage all users</desc>
+            <path>/user/index/q/{{q}}/user_status/{{user_status}}/user_type/{{user_type}}/page/{{page}}</path>
+            <prev></prev>
+        </action>
+        <action id='edit-user'>
+            <title>Edit User</title>
+            <desc>Edit user infomation: username, email, password</desc>
+            <path>/user/edit-user/user/{{user}}</path>
+            <prev>index</prev>
+        </action>
+        <action id='embracer-manager'>
+            <title>Embracer Manager</title>
+            <desc>Manage embracers of a user</desc>
+            <path>/user/embracer-manager/user/{{user}}</path>
+            <prev>index</prev>
+        </action>
+        <action id='media-items'>
+            <title>User's Media Items</title>
+            <desc>Manage all photos, musics, videos, blogs of a user</desc>
+            <path>/user/media-items/user/{{user}}</path>
+            <prev>index</prev>
+        </action>
+        <action id='give-media-credit'>
+            <title>Give Credit on Media</title>
+            <desc>Give Credit on Media</desc>
+            <path>/user/give-media-credit/user/{{user}}</path>
+            <prev>index</prev>
+        </action>
+        <action id='give-blog-credit'>
+            <title>Give Credit on Blog</title>
+            <desc>Give Credit on Blog</desc>
+            <path>/user/give-blog-credit/user/{{user}}</path>
+            <prev>index</prev>
+        </action>
+    </page>
+    <page id ='collection'>
+        <action id='index'>
+            <title>Collections creators manager</title>
+            <desc>Manage all collections creators</desc>
+            <path>/collection/index/page/{{page}}</path>
+            <prev></prev>
+        </action>
+        <action id='collections-show'>
+            <title>User's Collections</title>
+            <desc>Manage all user's collections</desc>
+            <path>/collection/collections-show/user/{{user}}</path>
+            <prev>index</prev>
+        </action>
+        <action id='collection-items'>
+            <title>Collection's Items</title>
+            <desc>Manage all collection's items</desc>
+            <path>/collection/collection-items/id/{{id}}/user/{{user}}</path>
+            <prev>collections-show</prev>
+        </action>
+        <action id='trending-collection'>
+            <title>Trending collection's Items</title>
+            <desc>Manage all trending collection's items</desc>
+            <path>/collection/trending-collection/id/{{id}}/user/{{user}}</path>
+            <prev></prev>
+        </action>
+    </page>
+    <page id ='notifications'>
+        <action id='index'>
+            <title>System Notifications</title>
+            <desc>Sending message to all creativ users</desc>
+            <path>/notifications/index</path>
+            <prev></prev>
+        </action>
+    </page>
+    <page id ='mass-mailer'>
+        <action id='index'>
+            <title>Mass Mailer</title>
+            <desc>List all Mass Mailer lists</desc>
+            <path>/mass-mailer</path>
+            <prev></prev>
+        </action>
+    </page>
+        
+    <page id ='viral'>
+        <action id='index'>
+            <title>Viral</title>
+            <desc>List all users with associated viral</desc>
+            <path>/viral/page/{{page}}</path>
+            <prev></prev>
+        </action>
+    </page>
+        
+    <page id ='magazine'>
+        <action id='index'>
+            <title>Manage Magazine</title>
+            <desc>Manage Magazine</desc>
+            <path>/magazine</path>
+            <prev></prev>
+        </action>
+        <action id='add-cover'>
+            <title>Add Cover for Issue</title>
+            <desc>Add Cover for Issue</desc>
+            <path>/magazine/add-cover</path>
+            <prev></prev>
+        </action>
+        <action id='add-content'>
+            <title>Add Content for Issue</title>
+            <desc>Add Content for Issue</desc>
+            <path>/magazine/add-content</path>
+            <prev></prev>
+        </action>
+    </page>
+        
+    <page id ='stats'>
+        <action id='index'>
+            <title>Statistic</title>
+            <desc>Verified/Unverified Reg per day/total, Registrations per day/total, Registrations per day/total...</desc>
+            <path>/stats</path>
+            <prev></prev>
+        </action>
+        <action id='content-upload-by-day'>
+            <title>Content upload by day</title>
+            <desc>Content upload by day</desc>
+            <path>/stats/content-upload-by-day</path>
+            <prev>index</prev>
+        </action>
+        <action id='most-viewed-portal'>
+            <title>Most viewed Portals</title>
+            <desc>Most viewed Portals</desc>
+            <path>/stats/most-viewed-portal</path>
+            <prev>index</prev>
+        </action>
+        <action id='top-embracing'>
+            <title>Top 15 Embracing</title>
+            <desc>Top 15 Embracing</desc>
+            <path>/stats/top-embracing</path>
+            <prev>index</prev>
+        </action>
+        <action id='top-embrace'>
+            <title>Top 15 Embrace</title>
+            <desc>Top 15 Embrace</desc>
+            <path>/stats/top-embrace</path>
+            <prev>index</prev>
+        </action>
+        <action id='top-tag'>
+            <title>Top 50 used tags</title>
+            <desc>Top 50 used tags</desc>
+            <path>/stats/top-tag</path>
+            <prev>index</prev>
+        </action>
+        <action id='highest-view-media'>
+            <title>Highest viewed media items</title>
+            <desc>Highest viewed media items</desc>
+            <path>/stats/highest-view-media</path>
+            <prev>index</prev>
+        </action>
+        <action id='highest-comment-media'>
+            <title>Highest commented media items</title>
+            <desc>Highest commented media items</desc>
+            <path>/stats/highest-comment-media</path>
+            <prev>index</prev>
+        </action>
+        <action id='highest-inspire-media'>
+            <title>Highest inspired media items</title>
+            <desc>Highest inspired media items</desc>
+            <path>/stats/highest-inspire-media</path>
+            <prev>index</prev>
+        </action>
+        <action id='beanstalkd'>
+            <title>BeansTalkD job by day</title>
+            <desc>BeansTalkD job by day</desc>
+            <path>/stats/beanstalkd</path>
+            <prev>index</prev>
+        </action>
+        <action id='beanstalkd-failed'>
+            <title>BeansTalkD failed job by day</title>
+            <desc>BeansTalkD failed job by day</desc>
+            <path>/stats/beanstalkd-failed</path>
+            <prev>beanstalkd</prev>
+        </action>
+        <action id='registration'>
+            <title>Verified Reg by day</title>
+            <desc>Verified Reg by day</desc>
+            <path>/stats/registration</path>
+            <prev>index</prev>
+        </action>
+        <action id='registration-hour'>
+            <title>Verified Reg by hour</title>
+            <desc>Verified Reg by hour</desc>
+            <path>/stats/registration-hour</path>
+            <prev>index</prev>
+        </action> 
+        <action id='top-creativ-categories'>
+            <title>Top 50 creativ categories</title>
+            <desc>Top 50 creativ categories</desc>
+            <path>/stats/top-creativ-categories</path>
+            <prev>index</prev>
+        </action>
+    </page>
+        
+    <page id ='error'>
+        <action id='index'>
+            <title>Unkown error</title>
+            <desc>Display error detail</desc>
+            <path>/err</path>
+            <prev></prev>
+        </action>
+    </page>
+</pages>

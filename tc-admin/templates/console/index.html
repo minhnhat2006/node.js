@@ -1,0 +1,259 @@
+{% extends '../layout/default.html' %}
+{% block head %}
+{% parent %}
+{% css %}
+pw/css/admin/v2/console.css
+{% endcss %}
+{% js %}
+pw/scripts/admin/v2/console.js
+{% endjs %}
+{% endblock %}
+
+{% block content %}
+
+<style>
+    .dropdown-menu{min-width:100px}
+    .dropdown-menu li{text-align:left}
+    .form-horizontal .control-group{margin-bottom:5px}
+    .view-panel{background-color:#FFFFFF; border: 1px #CCCCCC solid; width:960px}
+    .left-panel{width:220px; float:left; padding:10px}
+    .right-panel{width:699px; float:left; border-left:1px #CCCCCC solid; min-height:500px; padding:10px}
+    .left-panel .controls {margin-left:0}
+    textarea{resize: none}
+    .history-line{
+        border-bottom:1px solid #CCC;
+        padding: 5px 0px;
+    }
+    #apiHistory{height:400px; overflow:scroll}
+    textarea[readonly]{border:none; width:98%; font-size:12px; background-color:#FFFFFF; cursor: auto; box-shadow: none; transition: none}
+    .tagedit-list {width: 205px}
+    .tagedit-list li.tagedit-listelement{margin-bottom:0px}
+    .tagedit-list {margin-bottom:5px;}
+    .tagedit-list li.tagedit-listelement-new input{padding-bottom:2px}
+</style>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="widget wgreen">
+            <div class="widget-head">
+                <div class="pull-left">Rest API Console</div>
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="widget-content">
+                <div class="padd">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-lg-4 control-label">Access Token</label>
+                            <div class="col-lg-8">
+                                <div class="form-group-console">
+                                    <input type="text" class="form-control" id="accessToken" disabled="disabled" value="{{accessToken}}">
+                                </div>
+                                <button class="btn btn-success" type="button" id="btnGetToken">Get Access Token</button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-4 control-label">Profile</label>
+                            <div class="col-lg-10">
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="optionsDevice" value="mobile" checked> Mobile
+                                    </label>
+                                </div>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="optionsDevice" value="table"> Tablet
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-4 control-label">Device Id</label>
+                            <div class="col-lg-10">
+                                <input type="text" id="deviceId" class="form-control" name="deviceId" disabled="disabled" value="{{deviceId}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-4 control-label" style="padding-top:0">
+                                <button class="btn btn-default" tabindex="-1" id="lblMethod">GET</button>
+                            </label>
+                            <div class="col-lg-8">
+                                <label class='control-label form-control' style="background-color: #eee;display:inline-block" id="spanAPIName"></label>
+                                <div class="form-group-console" style="margin-left:-4px">
+                                    <input id="apiQuery" type="text" class="form-control">
+                                </div>
+                                <button class="btn btn-primary" type="button" id="makeAPICall">Submit</button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-lg-12">
+                                <div class="view-panel">
+                                    <div class="left-panel">
+                                        <label>API Call</label>
+                                        <div class="controls">
+                                            <select name="optCall" id="optCall" class="form-control">
+                                                <option value="activity|activities|actList|GET" selected="selected">Activities</option>
+                                                <option value="activity||actDetail|GET">Activity Details</option>
+                                                <option value="content|album|ctnAlbum|GET">Album Content</option>
+                                                <option value="content|album_list|lstAlbum|GET">Album List</option>
+                                                <option value="activity|comment|ctnComment|POST">Comment</option>
+                                                <option value="activity|inspire|actInspire|POST">Inspire</option>
+                                                <option value="activity|uninspire|actUninspire|POST">Uninspire</option>
+                                                <option value="activity|embrace|actEmbrace|POST">Embrace</option>
+                                                <option value="activity|unembrace|actUnembrace|POST">Unembrace</option>
+                                                <option value="register|register|ctnRegister|POST">Register</option>
+                                                <option value="upload|upload|ctnUpload|POST">Upload</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label>User</label>
+                                            <input  type="text" style="width: 205px;" id="user_name" value="{{username}}" readonly="readonly" class="form-control">
+                                            <input  type="hidden" style="width: 205px;" id="user_id" value="{{user}}">
+                                        </div>
+                                        <div id="actList" class="input-panel">
+                                            <label>Media Type</label>
+                                            <select id="actListMediaType" class="form-control">
+                                                <option value="blog">Blog</option>
+                                                <option value="photo">Photo</option>
+                                                <option value="music">Music</option>
+                                                <option value="video">Video</option>
+                                                <option value="photo,music,video">Photo+Music+Video</option>
+                                            </select>
+                                        </div>
+                                        <div id="actDetail" class="input-panel" style="display:none">
+                                            <label>Media Type</label>
+                                            <select id="actDetailMediaType" class="form-control">
+                                                <option value="blog">Blog</option>
+                                                <option value="photo">Photo</option>
+                                                <option value="music">Music</option>
+                                                <option value="video">Video</option>
+                                            </select>
+                                            <label>Media ID</label>
+                                            <input type="text" style="width:205px" id="actDetailMediaId" class="form-control">
+                                        </div>
+
+                                        <div id="actEmbrace" class="input-panel" style="display:none">
+                                            <label>Embraced User</label>
+                                            <input type="text" style="width:205px" id="actEmbracedUser" class="form-control">
+                                        </div>
+                                        <div id="actUnembrace" class="input-panel" style="display:none">
+                                            <label>Embraced User</label>
+                                            <input type="text" style="width:205px" id="actUnembracedUser" class="form-control">
+                                        </div>
+
+                                        <div id="actInspire" class="input-panel" style="display:none">
+                                            <label>Media Type</label>
+                                            <select id="actInspireMediaType" class="form-control">
+                                                <option value="blog">Blog</option>
+                                                <option value="photo">Photo</option>
+                                                <option value="music">Music</option>
+                                                <option value="video">Video</option>
+                                            </select>
+                                            <label>Media ID</label>
+                                            <input type="text" style="width:205px" id="actInspireMediaId" class="form-control">
+                                        </div>
+                                        <div id="actUninspire" class="input-panel" style="display:none">
+                                            <label>Media Type</label>
+                                            <select id="actUninspireMediaType" class="form-control">
+                                                <option value="blog">Blog</option>
+                                                <option value="photo">Photo</option>
+                                                <option value="music">Music</option>
+                                                <option value="video">Video</option>
+                                            </select>
+                                            <label>Media ID</label>
+                                            <input type="text" style="width:205px" id="actUninspireMediaId" class="form-control">
+                                        </div>
+                                        <div id="ctnComment" class="input-panel" style="display:none">
+                                            <label>Media Type</label>
+                                            <select name="ctnCommentMediaType" id="ctnCommentMediaType" class="form-control">
+                                                <option value="blog">Blog</option>
+                                                <option value="photo">Photo</option>
+                                                <option value="music">Music</option>
+                                                <option value="video">Video</option>
+                                            </select>
+                                            <label>Media ID</label>
+                                            <input type="text" id="ctnCommentMediaId" name="ctnCommentMediaId" style="width:205px" class="form-control">
+                                            <label>Comment</label>
+                                            <textarea style="width:205px" rows="2" name="ctnCommentContent" id="ctnCommentContent" class="form-control"></textarea>
+                                        </div>
+                                        <div id="ctnAlbum" class="input-panel" style="display:none">
+                                            <label>Media Type</label>
+                                            <select name="ctnAlbumMediaType" id="ctnAlbumMediaType" class="form-control">
+                                                <option value="photo">Photo</option>
+                                                <option value="music">Music</option>
+                                                <option value="video">Video</option>
+                                            </select>
+                                            <label>Album ID</label>
+                                            <input type="text" id="ctnAlbumId" name="ctnAlbumId" style="width:205px" class="form-control">
+                                        </div>
+                                        <div id="lstAlbum" class="input-panel" style="display:none">
+                                            <label>Media Type</label>
+                                            <select name="lstAlbumMediaType" id="lstAlbumMediaType" class="form-control">
+                                                <option value="photo">Photo</option>
+                                                <option value="music">Music</option>
+                                                <option value="video">Video</option>
+                                            </select>
+                                        </div>
+                                        <div id="ctnRegister" class="input-panel" style="display:none">
+                                            <label>Email</label>
+                                            <input type="text" style="width:205px" id="actRegisterEmail" class="form-control">
+                                            <label>Password</label>
+                                            <input type="text" style="width:205px" id="actRegisterPassword" class="form-control">
+                                        </div>
+                                        <div id="ctnUpload" class="input-panel" style="display:none">
+                                            <label>Album ID</label>
+                                            <input type="text" id="ctnUploadAlbumId" name="ctnUploadAlbumId" style="width:205px" class="form-control">
+                                            <label>Title</label>
+                                            <input type="text" id="ctnUploadTitle" name="ctnUploadTitle" style="width:205px" class="form-control">
+                                            <label>Description</label>
+                                            <textarea style="width:205px" rows="2" name="ctnUploadDesc" id="ctnUploadDesc" class="form-control"></textarea>
+                                            <label>Tags</label>
+                                            <input type="text" id="ctnUploadTag" name="tags[]" style="width:205px" class="form-control">
+                                            <label>Media Type</label>
+                                            <select name="ctnUploadMediaType" id="ctnUploadMediaType" class="form-control">                
+                                                <option value="photo">Photo</option>
+                                                <option value="music">Music</option>
+                                                <option value="video">Video</option>
+                                            </select>
+                                            <div id="ctnUploadPM">
+                                                <button class="btn btn-primary" style="width:200px" id="btnChooseFile">Choose File</button>
+                                                <input type="file" id="photoUpload" style="display:none" class="form-control"/>
+                                                <label id="lblFilename"></label>
+                                                <form id="uploadForm"></form>
+                                            </div>
+                                            <div id="ctnUploadV" style="display:none">
+                                                <label>Import URL</label>
+                                                <input type="text" id="ctnUploadUrl" name="ctnUploadUrl" style="width:205px" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="right-panel">
+                                        <ul id="myTab" class="nav nav-tabs" data-tabs="tabs">
+                                            <li class="active"><a href="#apiResponse" data-toggle="tab">Reponse</a></li>
+                                            <li><a href="#apiHistory" data-toggle="tab">API Logs</a></li>
+                                        </ul>
+                                        <div id="myTabContent" class="tab-content">
+                                            <div id="apiResponse" class="tab-pane active">
+                                                <textarea id="source" rows="20" readonly="readonly" style="width: 400px"></textarea>
+                                            </div>
+                                            <div id="apiHistory" class="tab-pane"></div>
+                                        </div>
+                                    </div>
+                                    <div style="clear:both"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="widget-foot">
+                <!-- Footer goes here -->
+            </div>
+        </div> 
+    </div>
+
+    {% endblock %}

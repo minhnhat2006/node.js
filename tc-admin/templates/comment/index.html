@@ -1,0 +1,77 @@
+{% extends '../layout/default.html' %}
+{% import '../layout/pagination.html' as pagination %}
+{% import '../layout/commonMacros.html' as macros %}
+
+{% block head %}
+{% parent %}
+{% css %}
+pw/css/admin/v2/comment_manager.css
+{% endcss %}
+{% js %}
+pw/scripts/admin/v2/comment.js
+{% endjs %}
+{% endblock %}
+
+{% block content %}
+
+<div class="widget widget-full wgreen">
+    <!-- Widget title -->
+    <div class="widget-head">
+        <div class="pull-left" style="margin-top:5px">Select a User</b></div>
+        <div class="pull-right">
+            <form action='/comment/index' method='GET'>
+                <div align=right class="form-group">
+                    <input type="text" name="s_user" size=30 value="{{s_user}}" class="form-control user-search" placeholder="Type Username">
+                    <select name="user_status" class="form-control user-search">
+                        <option value="">User status</option>
+                        <option value="A">A</option>
+                    </select>
+                    <select name="user_type" class="form-control user-search">
+                        <option value="">User type</option>
+                        <option value="C">C</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+            </form>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="widget-content no-border">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Index</th>
+                    <th width="250">User</th>        
+                    <th>User status</th>
+                    <th>User type</th>
+                    <th>User created</th>
+                    <th>User last login</th>
+                    <th>User last update</th>
+                    <th width=20 class="center">Action</th>
+                </tr>
+            </thead>
+            {% for item in data['data'] %}
+            <tr>
+                <td>{{loop.index}}</td>
+                <td>{{macros.prepareUserView(item)}}</td>
+                <td>{{item['user_status']}}</td>
+                <td>{{item['user_type']}}</td>
+                <td>{{item['user_created']}}</td>
+                <td>{{item['user_last_login']}}</td>
+                <td>{{item['user_last_update']}}</td>
+                <td class="center">
+                    <a href="/comment/media/user/{{item['user']}}"  alt="Select User" title="Select User"><i class="tc-icon tc-icon-ok"></i></a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="widget-foot no-border">
+        {{pagination.paginationControl(data)}}
+        <div class="clearfix"></div> 
+    </div>
+</div>
+
+{% endblock %}

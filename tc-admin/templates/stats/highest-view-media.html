@@ -1,0 +1,52 @@
+{% extends '../layout/default.html' %}
+{% import '../layout/commonMacros.html' as macros %}
+
+{% block head %}
+{% parent %}
+{% endblock %}
+
+{% block content %}
+
+<div class="widget widget-full wgreen">
+    <!-- Widget title -->
+    <div class="widget-head">
+        <div class="pull-left">Highest viewed media items</div>
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="widget-content no-border">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Index</th>
+                    <th>Media</th>
+                    <th>User</th>
+                    <th>Views count</th>
+                </tr>
+            </thead>
+            {% for mediaItem in media_data %}
+            <tr>
+                <td>{{loop.index}}</td>
+                <td>{{macros.prepareUserView(mediaItem['owner'])}}</td>
+                <td>{{macros.prepareMediaView(mediaItem)}}</td>
+                <td>{{mediaItem['comment_count']}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="widget-foot no-border">
+        <div class="pull-right" style="margin:20px">
+            <form method='GET' class="form-inline" action="/stats/highest-view-media">
+                Choose number of records want to show: 
+                <input type='text' name='limit' value=0 size=10 class="form-control" style="width:100px"/> records
+                <button type="submit" class="btn btn-primary" style="margin-left:10px">Show</button>
+            </form>
+        </div>
+        <div class="clearfix"></div> 
+    </div>
+</div>
+
+{% endblock %}
+
+

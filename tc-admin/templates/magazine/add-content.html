@@ -1,0 +1,88 @@
+{% extends '../layout/default.html' %}
+{% import '../layout/pagination.html' as pagination %}
+{% import '../layout/commonMacros.html' as macros %}
+
+{% block head %}
+{% parent %}
+{% css %}
+bobafett/vendor/blueimp/css/jquery.fileupload-ui.css
+pw/css/admin/v2/magazine.css
+{% endcss %}
+{% js %}
+bobafett/vendor/blueimp/js/load-image.min.js
+bobafett/vendor/blueimp/js/canvas-to-blob.min.js
+bobafett/vendor/blueimp/js/tmpl.min.js
+bobafett/vendor/blueimp/js/jquery.iframe-transport.js
+bobafett/vendor/blueimp/js/jquery.fileupload.js
+bobafett/vendor/blueimp/js/jquery.fileupload-fp.js
+bobafett/vendor/blueimp/js/jquery.fileupload-ui.js
+bobafett/vendor/blueimp/js/locale.js
+pw/scripts/admin/v2/magazine.js
+{% endjs %}
+{% endblock %}
+
+{% block content %}
+
+
+<form method="POST" action="/magazine/add-cover" id='frmContent'>
+    <div class="add-mgz-content-container">
+        <div class="flag-creativ">Creativ</div>
+        <div class="perimeters">
+            <input type="hidden" name='magazineId' id='magazineId'>
+            <input type="hidden" name='categoryId' id='categoryId' value='0'>
+            <input type="hidden" name='storyIds[]' id='storyIds'>
+
+            <div class="content-user" id='divContentUser'>
+                <i class='icon icon-edit-sign' id='btnSelectUser'></i>
+                <div class="content-user-avatar"><img src=""></div>
+
+                <div class="content-user-info">
+                    <span class='username'>ARIEFMANN</span>
+                    <span class='user-category'>[ARTIST]</span>
+                    <span class='user-point'>356 points | 5.1k followers</span>
+                    <a href='#' class='user-location'>Selangor, Malaysia</a>
+                </div>
+            </div>
+
+            <input type="text" name='userId' id='userId' class='content-user-id'>
+
+            <h5>ABOUT</h5>
+            <textarea class="content-desc" placeholder="Content Description" id='about' name='about'></textarea>
+
+            <hr/>
+
+            <h6>View my work on CREATIV</h6>
+            <div class="content-work">
+                <img src=''/>
+                <img src=''/>
+            </div>
+        </div>
+
+        <div class="cover" id='btnUploadContent'>
+            <div class="upload-btn">
+                <span><i class='icon-picture'></i>Upload content picture</span>
+                <input type="file" id="file-media" name="media" accept="image/x-png, image/gif, image/jpeg">
+                <input type="hidden" name='cover' id='hdnContent'>
+            </div>
+            <img src="">
+            <a href='#' class='btn btn-info'>Read the full feature</a>
+        </div>
+
+        <div class="preview-cover" id="contentPreview">
+            <div id="remove-previewer" title="Remove Image">
+                <i class="icon icon-minus-sign"></i>
+            </div>
+        </div>
+    </div>
+
+    <div align=right style="margin: 10px 0px 10px 0px">
+        <button type='reset' class='btn btn-cancel'>Cancel</button>
+        <button type='submit' class='btn btn-primary'>Save Content</button>
+    </div> 
+</form>
+
+<script type="text/javascript">
+    window.creativToken = '{{token}}';
+</script>
+
+{% endblock %}

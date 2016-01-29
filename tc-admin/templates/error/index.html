@@ -1,0 +1,19 @@
+{% extends '../layout/default.html' %}
+
+{% block head %}
+{% parent %}
+{% endblock %}
+
+{% block content %}
+
+<h4>An unknown error occurred while fetching data.</h4>
+
+<h5>Error detail:</h5>
+
+<h6>Request parameters:</h6>
+<pre>{{helper.writeObject(params)}}</pre>
+
+<h6>Response data:</h6>
+<pre>{{error|json_encode}}</pre>
+
+{% endblock %}

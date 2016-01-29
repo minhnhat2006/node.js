@@ -1,0 +1,77 @@
+{% extends '../layout/default.html' %}
+{% import '../layout/pagination.html' as pagination %}
+{% import '../layout/commonMacros.html' as macros %}
+
+{% block head %}
+{% parent %}
+{% css %}
+pw/css/admin/v2/viral.css
+{% endcss %}
+{% js %}
+pw/scripts/admin/v2/viral.js
+{% endjs %}
+{% endblock %}
+
+{% block content %}
+
+<div class="widget widget-full wgreen">
+    <!-- Widget title -->
+    <div class="widget-head">
+        <div class="pull-left" style="margin-top:5px">Users</b></div>
+        <div class="pull-right">
+            <form action='/user' method='GET'>
+                <div align=right class="form-group">
+                    <input type="text" name="s_user" size=30 value="{{s_user}}" class="form-control user-search" placeholder="Type Username">
+                    <select name="user_viral" class="form-control user-search">
+                        <option value="" {% if (user_viral==='') %}selected{% endif %}>All</option>
+                        <option value="vip" {% if (user_viral==='vip') %}selected{% endif %}>VIP</option>
+                        <option value="75" {% if (user_viral==='75') %}selected{% endif %}><75%</option>
+                        <option value="high" {% if (user_viral==='high') %}selected{% endif %}>>75%</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+            </form>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="widget-content no-border">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Index</th>
+                    <th width="250">User</th>
+                    <th>Viral teir</th>
+                    <th>User base viral(%)</th>
+                    <th>User viral(%)</th>
+                    <th>VIP</th>
+                    <th width=50 class="center">Action</th>
+                </tr>
+            </thead>
+            {% for item in data['data'] %}
+            <tr>
+                <td>{{loop.index}}</td>
+                <td>{{macros.prepareUserView(item)}}</td>
+                <td>{{item['viral_data']['teir']}}</td>
+                <td>{{item['viral_data']['b_percent']}}</td>
+                <td>{{item['viral_data']['percent']}}</td>
+                <td>{% if (item['vip']) %}Yes{% else %}No{% endif %}</td>
+                <td class="center">
+                    {% if (item['vip']) %}
+                    <a href="#" class="viral-action vip"  alt="{{item['id']}}" title="Remove VIP" style="opacity:1"><i class="tc-icon tc-icon-star"></i></a>
+                    {% else %}
+                    <a href="#" class="viral-action" alt="{{item['id']}}" title="Set VIP" style="opacity:0.5"><i class="tc-icon tc-icon-star"></i></a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="widget-foot no-border">
+        {{pagination.paginationControl(data)}}
+        <div class="clearfix"></div> 
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,474 @@
+{% extends '../layout/default.html' %}
+
+{% block head %}
+{% parent %}
+{% css %}
+pw/css/admin/v2/stats.css
+{% endcss %}
+{% js %}
+pw/scripts/admin/v2/sparklines.js
+pw/scripts/admin/v2/queue.v1.min.js
+pw/scripts/admin/v2/stats.js
+pw/scripts/admin/v2/jquery.flot.js
+pw/scripts/admin/v2/jquery.flot.resize.js
+pw/scripts/admin/v2/jquery.flot.stack.js
+{% endjs %}
+{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-12"> 
+        <!-- List starts -->
+        <ul class="today-datas stats">
+
+            <!-- List #1 -->
+            <li class="bgreen">
+                <div class="pull-left"><span id="todayspark1" class="spark"></span></div>
+                <div class="pull-left"><img src="{{STATIC_BASE}}/pw/images/admin_waiting.gif"/></div>
+                <!-- Text -->
+                <div class="datas-text pull-right"><span class="bold">{{reg_verified_per_day.total}}</span>Verified Regs</div>
+
+                <div class="clearfix"></div>
+            </li>
+
+            <li class="bred">
+                <div class="pull-left"><span id="todayspark2" class="spark"></span></div>
+                <!-- Text -->
+                <div class="datas-text pull-right"><span class="bold">{{reg_un_verified_per_day.total}}</span> Unverified Regs</div>
+
+                <div class="clearfix"></div>
+            </li>
+
+            <li class="blightblue">
+                <div class="pull-left"><span id="todayspark3" class="spark"></span></div>
+                <!-- Text -->
+                <div class="datas-text pull-right"><span class="bold">{{reg_per_day.total}}</span>Registrations</div>
+
+                <div class="clearfix"></div>
+            </li>
+
+            <li class="bviolet">
+                <div class="pull-left"><span id="todayspark4" class="spark"></span></div>
+                <!-- Text -->
+                <div class="datas-text pull-right"><span class="bold">{{reg_email_per_day.total}}</span>Email. Regs</div>
+
+                <div class="clearfix"></div>
+            </li>
+
+            <li class="bblue">
+                <div class="pull-left"><span id="todayspark5" class="spark"></span></div>
+                <!-- Text -->
+                <div class="datas-text pull-right"><span class="bold">{{reg_facebook_per_day.total}}</span>Facebook. Regs</div>
+
+                <div class="clearfix"></div>
+            </li>
+
+            <li class="borange">
+                <div class="pull-left"><span id="todayspark6" class="spark"></span></div>
+                <!-- Text -->
+                <div class="datas-text pull-right"><span class="bold">{{reg_google_per_day.total}}</span>Google. Regs</div>
+
+                <div class="clearfix"></div>
+            </li>
+
+            <li class="bcadetblue">
+                <div class="pull-left"><span id="todayspark7" class="spark"></span></div>
+                <!-- Text -->
+                <div class="datas-text pull-right"><span class="bold">{{login_per_day.total}}</span>Logins</div>
+
+                <div class="clearfix"></div>
+            </li>
+
+            <li class="bbrown">
+                <div class="pull-left"><span id="todayspark8" class="spark"></span></div>
+                <!-- Text -->
+                <div class="datas-text pull-right"><span class="bold">{{pageview_per_day.total}}</span>Page Views</div>
+
+                <div class="clearfix"></div>
+            </li>
+
+            <li class="bdarkcyan">
+                <div class="pull-left"><span id="todayspark9" class="spark"></span></div>
+                <!-- Text -->
+                <div class="datas-text pull-right"><span class="bold">{{embrace_per_day.total}}</span>Embraces</div>
+
+                <div class="clearfix"></div>
+            </li>
+
+            <li class="bseagreen">
+                <div class="pull-left"><span id="todayspark10" class="spark"></span></div>
+                <!-- Text -->
+                <div class="datas-text pull-right"><span class="bold">{{inspire_per_day.total}}</span>Inspires</div>
+
+                <div class="clearfix"></div>
+            </li>
+
+            <li class="bchocolate">
+                <div class="pull-left"><span id="todayspark11" class="spark"></span></div>
+                <!-- Text -->
+                <div class="datas-text pull-right"><span class="bold">{{comment_per_day.total}}</span>Comments</div>
+
+                <div class="clearfix"></div>
+            </li>
+
+            <li class="bslategrey">
+                <!-- Graph -->
+                <div class="pull-left"><i class="icon-picture"></i></div>
+                <!-- Text -->
+                <div class="datas-text pull-right"><span class="bold">{{total_media.total}}</span>Total Content</div>
+
+                <div class="clearfix"></div>
+            </li>
+
+        </ul> 
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12" style="width:100%;text-align:center">
+        <img src="{{g_img.url}}{{'?processor&token='}}{{g_img.token}}" style="max-width:49%"/>
+        <img src="http://st.creativ.com/index.php?module=API&method=eLibrary.getPortalStatistic&format=JSON"  style="max-width:49%"/>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Today Status -->
+    <div class="col-md-7">
+        <div class="widget wseagreen">
+            <div class="widget-head">
+                <div class="pull-left">Today Status</div>
+                <div class="widget-icons pull-right">
+                    <a href="#" class="wminimize"><i class="icon-chevron-up"></i></a> 
+                    <a href="#" class="wclose"><i class="icon-remove"></i></a>
+                </div>
+                <div class="clearfix"></div>
+            </div> 
+
+            <div class="widget-content" style="border-bottom:2px solid #ddd">
+                <div class="padd">
+
+                    <!-- Visitors, pageview, bounce rate, etc., Sparklines plugin used -->
+                    <ul class="current-status" style="height:250px">
+                        <li class="stats">
+                            <span id="status1"></span> <span class="bold"><a href="/stats/registration" style="font-weight:600;color:#666">Verified Registrations</a> : {{reg_verified_per_day.per_day}}</span> <img src="{{STATIC_BASE}}/pw/images/admin_loading.gif" style="opacity:0.5">
+                        </li>
+                        <li class="stats">
+                            <span id="status2"></span> <span class="bold">Unverified Registrations : {{reg_un_verified_per_day.per_day}}</span>
+                        </li>
+                        <li class="stats">
+                            <span id="status3"></span> <span class="bold">Registrations : {{reg_per_day.per_day}}</span>
+                        </li>
+                        <li class="stats">
+                            <span id="status4"></span> <span class="bold">Email Registrations : {{reg_email_per_day.per_day}}</span>
+                        </li>
+                        <li class="stats">
+                            <span id="status5"></span> <span class="bold">Facebook Registrations : {{reg_facebook_per_day.per_day}}</span>
+                        </li>
+                        <li class="stats">
+                            <span id="status6"></span> <span class="bold">Google Registrations : {{reg_google_per_day.per_day}}</span>
+                        </li>
+                        <li class="stats">
+                            <span id="status7"></span> <span class="bold">Logins : {{login_per_day.per_day}}</span>
+                        </li>
+                        <li class="stats">
+                            <span id="status8"></span> <span class="bold">Page Views : {{pageview_per_day.per_day}}</span>
+                        </li>
+                        <li class="stats">
+                            <span id="status9"></span> <span class="bold">Embraces : {{embrace_per_day.per_day}}</span>
+                        </li>
+                        <li class="stats">
+                            <span id="status10"></span> <span class="bold">Inspires : {{inspire_per_day.per_day}}</span>
+                        </li>
+                        <li class="stats">
+                            <span id="status11"></span> <span class="bold">Comments : {{comment_per_day.per_day}}</span>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- Contents uploaded by day -->
+    <div class="col-md-5">
+        <div class="widget wblue">
+            <!-- Widget title -->
+            <div class="widget-head">
+                <div class="pull-left"><a href='/stats/content-upload-by-day'>Today content uploaded</a></div>
+                <div class="widget-icons pull-right">
+                    <a href="#" class="wminimize"><i class="icon-chevron-up"></i></a> 
+                    <a href="#" class="wclose"><i class="icon-remove"></i></a>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="widget-content">
+                <!-- Widget content -->
+                <div class="padd">
+                    <div id='bar-chart'></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+
+    <!-- Most viewed portals -->
+    <div class="col-md-4">
+        <div class="widget wbrown">
+            <!-- Widget title -->
+            <div class="widget-head">
+                <div class="pull-left"><a href='/stats/most-viewed-portal'>Most viewed portals</a></div>
+                <div class="widget-icons pull-right">
+                    <a href="#" class="wminimize"><i class="icon-chevron-up"></i></a> 
+                    <a href="#" class="wclose"><i class="icon-remove"></i></a>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="widget-content referrer" id="most-view-portals">
+                <!-- Widget content -->
+
+                <table class="table table-bordered" id="tbl1">
+                    <tr>
+                        <th>Name</th>
+                        <th>Views</th>
+                    </tr>
+                    <tr><td colspan="3" style='border-bottom:0 !important'><img src="{{STATIC_BASE}}/pw/images/admin_loading.gif" style="opacity:0.5;height:32px;width:32px;max-width:32px"></td></tr>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Highest commented media content -->
+    <div class="col-md-4">
+        <div class="widget wchocolate">
+            <!-- Widget title -->
+            <div class="widget-head">
+                <div class="pull-left"><a href='/stats/highest-comment-media'>Highest commented content</a></div>
+                <div class="widget-icons pull-right">
+                    <a href="#" class="wminimize"><i class="icon-chevron-up"></i></a> 
+                    <a href="#" class="wclose"><i class="icon-remove"></i></a>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="widget-content referrer" id="highest-comment-content">
+                <!-- Widget content -->
+
+                <table class="table table-bordered" id="tbl2">
+                    <tr>
+                        <th>Name</th>
+                        <th>Comments</th>
+                    </tr>
+                    <tr><td colspan="3" style='border-bottom:0 !important'><img src="{{STATIC_BASE}}/pw/images/admin_loading.gif" style="opacity:0.5;height:32px;width:32px;max-width:32px"></td></tr>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Highest viewed media content -->
+    <div class="col-md-4">
+        <div class="widget wslategrey">
+            <!-- Widget title -->
+            <div class="widget-head">
+                <div class="pull-left"><a href='/stats/highest-view-media'>Highest viewed content</a></div>
+                <div class="widget-icons pull-right">
+                    <a href="#" class="wminimize"><i class="icon-chevron-up"></i></a> 
+                    <a href="#" class="wclose"><i class="icon-remove"></i></a>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="widget-content referrer" id="highest-view-content">
+                <!-- Widget content -->
+
+                <table class="table table-bordered" id="tbl3">
+                    <tr>
+                        <th>Name</th>
+                        <th>Views</th>
+                    </tr>
+                    <tr><td colspan="3" style='border-bottom:0 !important'><img src="{{STATIC_BASE}}/pw/images/admin_loading.gif" style="opacity:0.5;height:32px;width:32px;max-width:32px"></td></tr>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Highest inspired media content -->
+    <div class="col-md-4">
+        <div class="widget wseagreen">
+            <!-- Widget title -->
+            <div class="widget-head">
+                <div class="pull-left"><a href='/stats/highest-inspire-media'>Highest inspired content</a></div>
+                <div class="widget-icons pull-right">
+                    <a href="#" class="wminimize"><i class="icon-chevron-up"></i></a> 
+                    <a href="#" class="wclose"><i class="icon-remove"></i></a>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="widget-content referrer" id="highest-inspire-content">
+                <!-- Widget content -->
+
+                <table class="table table-bordered" id="tbl4">
+                    <tr>
+                        <th>Name</th>
+                        <th>Inspires</th>
+                    </tr>
+                    <tr><td colspan="3" style='border-bottom:0 !important'><img src="{{STATIC_BASE}}/pw/images/admin_loading.gif" style="opacity:0.5;height:32px;width:32px;max-width:32px"></td></tr>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Top 15 embracing -->
+    <div class="col-md-4">
+        <div class="widget wblue">
+            <!-- Widget title -->
+            <div class="widget-head">
+                <div class="pull-left"><a href='/stats/top-embracing'>Top 15 embracing</a></div>
+                <div class="widget-icons pull-right">
+                    <a href="#" class="wminimize"><i class="icon-chevron-up"></i></a> 
+                    <a href="#" class="wclose"><i class="icon-remove"></i></a>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="widget-content referrer" id="top-embracing">
+                <!-- Widget content -->
+                <table class="table table-bordered" id="tbl5">
+                    <tr>
+                        <th>Name</th>
+                        <th>Count</th>
+                    </tr>
+                    <tr><td colspan="3" style='border-bottom:0 !important'><img src="{{STATIC_BASE}}/pw/images/admin_loading.gif" style="opacity:0.5;height:32px;width:32px;max-width:32px"></td></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top 15 embrace -->
+    <div class="col-md-4">
+        <div class="widget wdarkcyan">
+            <!-- Widget title -->
+            <div class="widget-head">
+                <div class="pull-left"><a href='/stats/top-embrace'>Top 15 embrace</a></div>
+                <div class="widget-icons pull-right">
+                    <a href="#" class="wminimize"><i class="icon-chevron-up"></i></a> 
+                    <a href="#" class="wclose"><i class="icon-remove"></i></a>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="widget-content referrer"  id="top-embrace">
+                <!-- Widget content -->
+
+                <table class="table table-bordered" id="tbl6">
+                    <tr>
+                        <th>Name</th>
+                        <th>Count</th>
+                    </tr>
+                    <tr><td colspan="3" style='border-bottom:0 !important'><img src="{{STATIC_BASE}}/pw/images/admin_loading.gif" style="opacity:0.5;height:32px;width:32px;max-width:32px"></td></tr>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Top 50 used tags -->
+    <div class="col-md-4">
+        <div class="widget wviolet">
+            <!-- Widget title -->
+            <div class="widget-head">
+                <div class="pull-left"><a href='/stats/top-tag'>Top 50 used tags</a></div>
+                <div class="widget-icons pull-right">
+                    <a href="#" class="wminimize"><i class="icon-chevron-up"></i></a> 
+                    <a href="#" class="wclose"><i class="icon-remove"></i></a>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="widget-content referrer"  id="top-tag">
+                <!-- Widget content -->
+
+                <table class="table table-bordered" id="tbl7">
+                    <tr>
+                        <th>Tag</th>
+                        <th>Count</th>
+                    </tr>
+                    <tr><td colspan="2" style="border-bottom:0 !important"><img src="{{STATIC_BASE}}/pw/images/admin_loading.gif" style="opacity:0.5;height:32px;width:32px;max-width:32px"></td></tr>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- BeansTalkd Stats -->
+    <div class="col-md-8">
+        <div class="widget wgreen">
+            <!-- Widget title -->
+            <div class="widget-head">
+                <div class="pull-left"><a href='/stats/beanstalkd'>BeansTalkd Stats</a></div>
+                <div class="widget-icons pull-right">
+                    <a href="#" class="wminimize"><i class="icon-chevron-up"></i></a> 
+                    <a href="#" class="wclose"><i class="icon-remove"></i></a>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="widget-content referrer"  id="beanstalkd">
+                <!-- Widget content -->
+
+                <table class="table table-bordered" id="tbl8">
+                    <tr>
+                        <th>Date</th>
+                        <th>Total</th>
+                        <th>Failed Job</th>
+                        <th>Average Job</th>
+                        <th>Failed (%)</th>
+                    </tr>
+                    <tr><td colspan="5" style="border-bottom:0 !important"><img src="{{STATIC_BASE}}/pw/images/admin_loading.gif" style="opacity:0.5;height:32px;width:32px;max-width:32px"></td></tr>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Top 50 creativ categories -->
+    <div class="col-md-4">
+        <div class="widget wviolet">
+            <!-- Widget title -->
+            <div class="widget-head">
+                <div class="pull-left"><a href='/stats/top-creativ-categories'>Top 50 creativ categories</a></div>
+                <div class="widget-icons pull-right">
+                    <a href="#" class="wminimize"><i class="icon-chevron-up"></i></a> 
+                    <a href="#" class="wclose"><i class="icon-remove"></i></a>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="widget-content referrer"  id="top-creativ-categories">
+                <!-- Widget content -->
+
+                <table class="table table-bordered" id="tbl9">
+                    <tr>
+                        <th>Creative categories</th>
+                        <th>Count</th>
+                    </tr>
+                    <tr><td colspan="2" style="border-bottom:0 !important"><img src="{{STATIC_BASE}}/pw/images/admin_loading.gif" style="opacity:0.5;height:32px;width:32px;max-width:32px"></td></tr>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+

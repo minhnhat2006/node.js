@@ -1,0 +1,97 @@
+{% extends '../layout/default.html' %}
+{% import '../layout/pagination.html' as pagination %}
+
+{% block head %}
+{% parent %}
+{% js %}
+pw/scripts/admin/v2/user.js
+{% endjs %}
+{% endblock %}
+
+{% block content %}
+
+<input type="hidden" name='user' value="{{data['user']}}"/>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="widget wgreen">
+            <div class="widget-head">
+                <div class="pull-left">Change User's Profile</div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="widget-content">
+                <div class="padd">
+                    <div class="form quick-post">
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <label class="control-label col-lg-3" for="title">Email</label>
+                                <div class="col-lg-9" >
+                                    <input type='text' name='user_email' value='{{data['user_email']}}' class="form-control"/>
+                                </div>
+                            </div >
+                            <div class="form-group">
+                                <label class="control-label col-lg-3" for="title">Url/Username</label>
+                                <div class="col-lg-9" >
+                                    <input type='text' name='username' value='{{data['subpath']}}' class="form-control"/>
+                                </div>
+                            </div>
+
+                            <!-- Buttons -->
+                            <div class="form-group">
+                                <!-- Buttons -->
+                                <div class="col-lg-offset-3 col-lg-9">
+                                    <button type="submit" class="btn btn-success" id="btnUpdateUser">Save</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="widget-foot">
+                <!-- Footer goes here -->
+            </div>
+        </div >
+    </div>
+
+    <div class="col-md-6">
+        <div class="widget wblue">
+            <div class="widget-head">
+                <div class="pull-left">Change Password</div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="widget-content">
+                <div class="padd">
+                    <div class="form quick-post">
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <label class="control-label col-lg-3" for="title">New Password</label>
+                                <div class="col-lg-9" >
+                                    <input type='password' name='new_password' class="form-control"/>
+                                </div>
+                            </div >
+                            <div class="form-group">
+                                <label class="control-label col-lg-3" for="title">Confirm Password</label>
+                                <div class="col-lg-9" >
+                                    <input type='password' name='confirm_password' class="form-control"/>
+                                </div>
+                            </div>
+
+                            <!-- Buttons -->
+                            <div class="form-group">
+                                <!-- Buttons -->
+                                <div class="col-lg-offset-3 col-lg-9">
+                                    <button type="submit" class="btn btn-primary" id="btnUpdatePassword">Save</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="widget-foot">
+                <!-- Footer goes here -->
+            </div>
+        </div >
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends '../layout/default.html' %}
+{% import '../layout/pagination.html' as pagination %}
+{% import '../layout/commonMacros.html' as macros %}
+
+{% block head %}
+{% parent %}
+{% js %}
+pw/scripts/admin/v2/blog.js
+{% endjs %}
+{% endblock %}
+
+{% block content %}
+
+<div class="widget widget-full wgreen">
+    <!-- Widget title -->
+    <div class="widget-head">
+        <div class="pull-left">Blogs</div>
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="widget-content no-border">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th width="20">Index</th>
+                    <th width="250">Username</th>
+                    <th>Blog title</th>
+                    <th width=20>Action</th>
+                </tr>
+            </thead>
+            {% for item in data['data'] %}
+            <tr>
+                <td>{{item['id']}}</td>
+                <td>{{macros.prepareUserView(item['user'])}}</td>
+                <td>{{item['title']}}</td>
+                <td>
+                    <a title=" Edit " href="/blog/edit/id/{{item['id']}}"><i class="tc-icon tc-icon-edit"></i></a>
+                    <a title=" Delete " href="#" alt="{{item['id']}}" class='deleteBlog'><i class="tc-icon tc-icon-trash"></i></a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="widget-foot no-border">
+        {{pagination.paginationControl(data)}}
+        <div class="clearfix"></div> 
+    </div>
+</div>
+
+{% endblock %}
+
+

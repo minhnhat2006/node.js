@@ -1,0 +1,144 @@
+{% extends '../layout/default.html' %}
+{% import '../layout/pagination.html' as pagination %}
+{% import '../layout/commonMacros.html' as macros %}
+
+{% block head %}
+{% parent %}
+{% css %}
+pw/css/admin/v2/popbox.css
+{% endcss %}
+{% js %}
+pw/scripts/admin/v2/mass-mailer.js
+{% endjs %}
+{% endblock %}
+
+{% block content %}
+
+<input type="hidden" id="hdnMid" value="{{mid}}" />
+<div style="width:38%;float:left;">
+    <div id="d_massmailers">
+        <div class="widget widget-full wgreen" style="margin:0 0 20px 0">
+            <!-- Widget title -->
+            <div class="widget-head">
+                <div class="pull-left">Mass Mailers</div>
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="widget-content no-border">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>List Name</th>
+                            <th>Number of Members</th>
+                            <th width="65" class="center">Action</th>
+                        </tr>
+                    </thead>
+                    {% for item in massmailers %}
+                    <tr class='{% if (mid === item['massmail_id']) %}mm-select{% endif %}'>
+                        {% if (item['massmail_id'] === '1') %}
+                        <td>{{item['name']}}</td>
+                         <td>{{item['count']}}</td>
+                         <td style="text-align: center">
+                                 <a href="#" title=" Compose Message " alt="Compose Message" class="mm_compose{{item['massmail_id']}}"><i class="tc-icon tc-icon-envelope"></i></a>
+                         <a href="#" title=" Edit " alt="Edit" style="visibility:hidden"><i class="tc-icon tc-icon-edit"></i></a>
+                         <a href="#" title=" Delete " alt="Delete" style="visibility:hidden"><i class="tc-icon tc-icon-trash"></i></a>
+                     </td>
+                     {% else %}
+                     <td><a href="/mass-mailer/index/id/{{item['massmail_id']}}">{{item['name']}}</a></td>
+                     <td>{{item['count']}}</td>
+                     <td class="center">
+                         <a href="#" title=" Compose Message " alt="Compose Message" class="mm_compose{{item['massmail_id']}}"><i class="tc-icon tc-icon-envelope"></i></a>
+                         <a href="#" title=" Edit " alt="Edit" class="mm_edit{{item['massmail_id']}}"><i class="tc-icon tc-icon-edit"></i></a>
+                         <a href="#" title=" Delete " alt="Delete" class="mm_delete{{item['massmail_id']}}"><i class="tc-icon tc-icon-trash"></i></a>
+                     </td>
+                     {% endif %}
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+        <button type='button' id="btn_add" class='btn btn-primary'>Add New List</button>
+    </div>
+</div>
+
+<div style="width:60%;float:right;">
+    <div id="d_mm_users">
+        <div class="widget widget-full wblue" style="margin:0 0 20px 0">
+            <!-- Widget title -->
+            <div class="widget-head">
+                <div class="pull-left">Users belong to Mass Mailer list</div>
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="widget-content no-border">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th width=130 class="center">Delete from list</th>
+                        </tr>
+                    </thead>
+                    {% if (users !== null) %}
+                    {% for item in users['data'] %}
+                    <tr>
+                        <td>{{macros.prepareUserView(item)}}</td>
+                        <td class="center">
+                            <a href="#" class="rm-user" uid="{{item['user']}}" title=" Remove user from list " alt="Remove user from list"><i class="tc-icon tc-icon-trash"></i></a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% endif %}
+                </table>
+            </div>
+
+            <div class="widget-foot no-border">
+                {{pagination.paginationControl(users)}}
+                <div class="clearfix"></div> 
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Begin Add new popup -->
+<div id="new_mm_pop_up">
+    <a class="b-close">x</a>
+    <h6>Input Mass Mailer list name, then click to add</h6>
+    <form class="form-inline" style="margin-left:0px">
+        <div class="form-group">
+            <input type="text" size="30" style="width:300px" id="mm_name" class="form-control" placeholder="Mass Mailer name"/>
+        </div>
+        <button type='submit' id="add_new_mm" class="btn btn-info" style="margin-left:-3px">Add</button>
+    </form>
+</div>
+<!-- End Add new popup -->
+
+<!-- Begin Edit popup -->
+<div id="edit_mm_pop_up">
+    <a class="b-close">x</a>
+    <h6>Change Mass Mailer list name, then click to remove</h6>
+    <form class="form-inline" style="margin-left:0px">
+        <div class="form-group">
+            <input type="text" size="30" style="width:300px" id="mm_edit_name" class="form-control" placeholder="Mass Mailer name" />
+        </div>
+        <button type='submit' id="edit_mm" class='btn btn-info'  style="margin-left:-3px">Update</button>
+    </form>
+    <input type="hidden" value="" id="mm_edit_id"/>
+</div>
+<!-- End Edit popup -->
+
+<!-- Begin Compose Message popup -->
+<div id="compose_msg_pop_up">
+    <a class="b-close">x</a>
+    <div class="alert alert-info" style="margin:-18px -18px 18px -18px;border-radius:12px !important;">
+        <strong>New Message</strong>
+    </div>
+    <h4>To: <span id="mm_compose_name"></span></h4>
+    <textarea rows="15" cols="50" id="mm_compose_txt" style="width:500px;margin-left:-10px;margin-right:-10px;"></textarea>
+    <div class="alert" style="margin:-8px -18px -18px -18px;border-radius:12px !important;background-color:white">
+        <button type='button' id="btn_send" class='btn btn-primary'>Send</button>
+    </div>
+    <input type="hidden" value="" id="mm_compose_id"/>
+</div>
+<!-- End Compose Message popup -->
+
+{% endblock %}

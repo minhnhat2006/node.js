@@ -1,0 +1,81 @@
+{% extends '../layout/default.html' %}
+{% import '../layout/pagination.html' as pagination %}
+{% import '../layout/commonMacros.html' as macros %}
+
+{% block head %}
+{% parent %}
+{% css %}
+pw/css/admin/v2/stats.css
+{% endcss %}
+{% js %}
+pw/scripts/admin/v2/upload-by-day.js
+{% endjs %}
+{% endblock %}
+
+{% block content %}
+
+<div class="widget widget-full wgreen">
+    <!-- Widget title -->
+    <div class="widget-head">
+        <div class="pull-left" style="margin-top:5px">Content upload by day</div>
+        <div class="pull-right">
+            <form method='GET' id="upload_option_form" action="/stats/content-upload-by-day">
+                <div align=right class="form-group">
+                    <input id="upload_date" type="text" name="date" value="{{dateUploaded}}" data-date-format="yyyy-mm-dd" class="form-control user-search">
+                    <select id="upload_type" name="media_type" class="form-control user-search">
+                        <option value="0"  {% if (typeActive === 0 )%} selected {% endif %}>All</option>
+                        <option value="photo" {% if (typeActive === 'photo' )%} selected {% endif %} >Photo</option>
+                        <option value="music" {% if (typeActive === 'music' )%} selected {% endif %} >Music</option>
+                        <option value="video" {% if (typeActive === 'video' )%} selected {% endif %} >Video</option>
+                        <option value="blog" {% if (typeActive === 'blog' )%} selected {% endif %} >Blog</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary">OK</button>
+                </div>
+            </form>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="widget-content no-border">
+        <table class="table table-bordered" id='content_list'>
+            <thead>
+                <tr>
+                    <th>Index</th>
+                    <th>User</th>
+                    <th>Media</th>
+                    <th>Date upload</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            {% for mediaItem in media_data['media_list'] %}
+            <tr>
+                <td>{{loop.index}}</td>
+                <td>{{macros.prepareUserView(mediaItem['owner'])}}</td>
+                <td>{{macros.prepareMediaViewLarge(mediaItem)}}</td>
+                <td>{{ mediaItem['created']}}</td>
+                <td>
+                    {% if (!mediaItem['is_uploaded_album']) %}
+                        {% if (mediaItem['type'] !== 'blog') %}
+                        <a title='Add to trending contents' href="javascript:void(0);" class='add-media tcbtn-{% if (mediaItem["istrending"]==='0') %}active{% else %}inactive{% endif %} trend-{{mediaItem["media_type_short"]}}_{{mediaItem["id"]}}' mediaId="{{mediaItem['id']}}" mediaType="{{mediaItem['type']}}" trend="{{mediaItem['istrending']}}"><i class="tc-icon tc-icon-star"></i></a>
+                        {% endif %}
+                        <a title='Inspire as Creative Movement' href="javascript:void(0);" class='tcbtn-{% if (mediaItem["inspired"]) %}inactive{% else %}active{% endif %} inspire-btn tcbtn-small act-inspire inspire-{{mediaItem["media_type_short"]}}_{{mediaItem["id"]}}' data='{{mediaItem["element_data"]}}'><span class="tc-icon-thumbs-up"></span></a>
+                    {% else %}
+                    NA
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        <div id="loadmore" style="display:none;">
+            <center>
+                <img src="{{STATIC_BASE}}/pw/images/loading.gif" />
+                <em>Loading ...</em>
+            </center>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
+
+

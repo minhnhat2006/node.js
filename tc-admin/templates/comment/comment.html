@@ -1,0 +1,62 @@
+{% extends '../layout/default.html' %}
+{% import '../layout/pagination.html' as pagination %}
+{% import '../layout/commonMacros.html' as macros %}
+
+{% block head %}
+{% parent %}
+{% js %}
+pw/scripts/admin/v2/comment.js
+{% endjs %}
+{% endblock %}
+
+{% block content %}
+
+<div class="widget widget-full wgreen">
+    <!-- Widget title -->
+    <div class="widget-head">
+        <div class="pull-left">Media <b>{{media['title']}}</b></div>
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="widget-content no-border">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th width="20">Index</th>
+                    <th>Media</th>
+                    <th>User</th>
+                    <th>Comment</th>
+                    <th>Date</th>
+                    <th width=20 class="center">Action</th>
+                </tr>
+            </thead>
+            {% for item in data['data'] %}
+            <tr>
+                <td>{{loop.index}}</td>
+                <td width="350">{{macros.prepareMediaView(media)}}</td>
+                <td width="300">{{macros.prepareUserView(item['user'])}}</td>
+                <td width="200" style="word-break:break-all">{{ helper.cutword(JSON.parse(item['comment']).msg, 25)}}</td>
+                <td width="100">{{item['date']}}</td>
+                <td class="center">
+                    <a title=" Edit " href="/comment/edit/user/{{user['user']}}/media/{{media['id']}}/mtype/{{media['type']}}/key/{{item['key']}}">
+                        <i class="tc-icon tc-icon-edit"></i>
+                    </a>
+                    <a href='#' title='Delete Comment' class='delete-comment' alt='Delete Comment'>
+                        <input type='hidden' value='{{item['media_id']}}' name='media_id'></input>
+                        <input type='hidden' value='{{item['media_type']}}' name='media_type'></input>
+                        <input type='hidden' value='{{item['key']}}' name='comment_key'></input>
+                        <i class="tc-icon tc-icon-trash"></i>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="widget-foot no-border">
+        {{pagination.paginationControl(data)}}
+        <div class="clearfix"></div> 
+    </div>
+</div>
+
+{% endblock %}

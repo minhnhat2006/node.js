@@ -1,0 +1,76 @@
+{# Prepare user view #}
+{% macro prepareUserView(_udata) %}
+
+<div style="width: 80px;height:80px;float:left">
+    <a href="{{_udata.portal}}"><img src="{{_udata.avatar}}" alt="avatar" /></a>
+</div>
+<div style="float:left;margin-left: 10px;padding-top: 10px; max-width: 140px;overflow:hidden">
+    <p style="margin: 0;">{{helper.ucfirst(_udata.name)}}</p>
+    <small>{{_udata.email}}</small></br>
+    <small>{{_udata.creativ}}</small>
+</div>
+
+{% endmacro %}
+
+{# Prepare media view #}
+{% macro prepareMediaView(_mdata) %}
+
+<div style="width:80px;height:80px;overflow:hidden;float:left" class="media-thumb">
+    <a href="{{_mdata.shareUrl}}"><img src="{{_mdata.thumb}}" alt="media" /></a>
+</div>
+<div style="float:left;margin-left:10px;padding-top:10px">
+    <p><a href="{{_mdata.shareUrl}}">{{ helper.cutword(_mdata.title, 20)}}</a></p>
+    <small>{{_mdata.type}}</small>
+</div>
+
+{% endmacro %}
+
+{# Prepare media view Large#}
+{% macro prepareMediaViewLarge(_mdata) %}
+
+<div style="width:120px;height:120px;overflow:hidden;float:left" class="media-thumb">
+    {% if (!_mdata['is_uploaded_album']) %}
+    <a href="{{_mdata.shareUrl}}"><img src="{{_mdata.thumb}}" alt="media" /></a>
+    {% else %}
+    <img src="{{_mdata.thumb}}" alt="media" />
+    {% endif %}
+</div>
+<div style="float:left;margin-left:10px;padding-top:10px">
+    <p>
+        {% if (!_mdata['is_uploaded_album']) %}
+        <a href="{{_mdata.shareUrl}}">{{ helper.cutword(_mdata.title, 40)}}</a>
+        {% else %}
+        {{ helper.cutword(_mdata.title, 40)}}
+        {% endif %}
+    </p>
+    <small>{{_mdata.type}}</small>
+</div>
+
+{% endmacro %}
+
+{# Prepare collection view #}
+{% macro prepareCollectionView(_cdata) %}
+<div style="width:80px;height:80px;overflow:hidden;float:left" class="media-thumb">
+    <div class ='collection-type {{_cdata.type}}'></div>
+
+</div>
+<div style="float:left;margin-left:10px;padding-top:10px">
+    <p><a href="/collection/collection-items/id/{{_cdata.id}}/user/{{_cdata.user}}">{{ helper.cutword(_cdata.title, 40)}}</a></p>
+    <small>COLLECTION_{{_cdata.type}}</small>
+
+</div>
+
+{% endmacro %}
+
+{# Prepare group view #}
+{% macro prepareGroupView(_gdata) %}
+
+<div style="width:80px;height:80px;overflow:hidden;float:left" class="media-thumb">
+    <a href="{{_gdata.view_url}}"><img src="{{_gdata.g_image}}" alt="media" /></a>
+</div>
+<div style="float:left;margin-left:10px;padding-top:10px">
+    <p><a href="{{_gdata.view_url}}">{{ helper.cutword(_gdata.title, 40)}}</a></p>
+    <small>{% if _gdata.g_privacy == 1 %} public {% else %} private {% endif %}</small>
+</div>
+
+{% endmacro %}

@@ -1,0 +1,13 @@
+/* 
+    Document   : user
+    Created on : Feb 22, 2014, 4:05:05 AM
+    Author     : nathan
+    Description:
+        Purpose of the stylesheet follows.
+*/
+/** user manager style ***/
+.ui-autocomplete {
+    max-height: 200px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+} 

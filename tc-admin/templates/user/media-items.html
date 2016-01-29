@@ -1,0 +1,52 @@
+{% extends '../layout/default.html' %}
+{% import '../layout/pagination.html' as pagination %}
+{% import '../layout/commonMacros.html' as macros %}
+
+{% block head %}
+{% parent %}
+{% js %}
+pw/scripts/admin/v2/user.js
+{% endjs %}
+{% endblock %}
+
+{% block content %}
+
+<input type="hidden" id='userid' value="{{user['user']}}"/>
+
+<div class="widget widget-full wgreen">
+    <!-- Widget title -->
+    <div class="widget-head">
+        <div class="pull-left"><b>{{user['subpath']}}</b>'s Media Items</div>
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="widget-content no-border">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Index</th>
+                    <th>Type</th>
+                    <th>Name</th>
+                    <th width=30>Action</th>
+                </tr>
+            </thead>
+            {% for item in data['data'] %}
+            <tr>
+                <td>{{loop.index}}</td>
+                <td>{{item['type']}}</td>        
+                <td>{{macros.prepareMediaView(item)}}</td>
+                <td>
+                    <a title="Warn user" class="warn-media" mediaId="{{item['id']}}" mediaType="{{item['type']}}" style="cursor:pointer"><i class="tc-icon tc-icon-exclamation-sign"></i></a>
+                    <a class="delete-media" mediaId="{{item['id']}}" mediaType="{{item['type']}}" style="cursor:pointer" title=" Are you sure you want to delete this media?"><i class="tc-icon tc-icon-trash"></i></a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="widget-foot no-border">
+        {{pagination.paginationControl(data)}}
+        <div class="clearfix"></div> 
+    </div>
+</div>
+{% endblock %}

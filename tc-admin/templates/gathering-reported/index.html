@@ -1,0 +1,93 @@
+{% extends '../layout/default.html' %}
+{% import '../layout/commonMacros.html' as macros %}
+{% block head %}
+{% parent %}
+{% css %}
+pw/css/admin/v2/popbox.css
+{% endcss %}
+{% js %}
+pw/scripts/admin/v2/gathering-manager.js
+{% endjs %}
+{% endblock %}
+
+{% block content %}
+<div class="widget widget-full wgreen">
+    <!-- Widget title -->
+    <div class="widget-head">
+        <div class="pull-left" style="margin-top:5px">Gathering Reported</b></div>
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="widget-content no-border">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th width="120">Gathering Id</th>
+                    <th width="250">Thumbnail</th>
+                    <th>Owner</th>
+                    <th>Members</th>
+                    <!--<th width="120">{% if (order==='asc')%}<a style='color: #333' href='/gathering-manager/index?get=list_reported&order=desc'>Report count <i class='tc-icon-circle-arrow-down'></i></a>
+                        {%else%}<a style='color: #333' href='/gathering-manager/index?get=list_reported&order=asc'>Report count <i class='tc-icon-circle-arrow-up'></i></a>{%endif%}</th>-->
+                    <th width="120">Report count</th>
+                    <th width="70">Action</th>
+                </tr>
+            </thead>
+            {% for item in data %}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+            <tr>
+                <td>{{item['id']}}</td>
+                <td>{{macros.prepareGroupView(item)}}</td>
+                <td>
+                    <a class='owner-name' href="{{item['portal']}}" >{{item['name']}}</a>
+                </td>
+                <td>{{item['counter']}}</td>
+                {% if item['report_count'] > 0 %} <td style="color: #F00">{{item['report_count']}}</td> {% else %} <td>0</td> {% endif %}
+
+                <td>
+                    <input type="hidden" class="groupId" value="{{item['id']}}"></input>
+                    <input type="hidden" class="groupOwner" value="{{item['user']}}"></input>
+                    <a href="#"  alt="Unreport item" title="Unreport item" class="unreport-group"><i class="tc-icon tc-icon-remove"></i></a>
+                    <a href="#"  alt="Delete item" title="Delete item" class="delete-reported-group"><i class="tc-icon tc-icon-trash"></i></a>
+                    <a href="#"  alt="Mark as mature content" mature='{{item['is_mature_content']}}' title="{% if (item['is_mature_content']!=0) %}Un-Mark mature content{% else %}Mark mature content{% endif %}" class="mark-mature-group">
+                       <i class="tc-icon tc-icon-flag" style="opacity:{% if (item['is_mature_content']!=0) %}1{% else %}0.4{% endif %}"></i>
+                    </a>
+                    {% if item['report_count'] > 0 %}
+                    <a href="#"  alt="Reported details" title="Reported details" class="report-details{{loop.index}}"><i class="tc-icon tc-icon-cog"></i></a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+</div>
+
+<!-- Begin Report details popup -->
+{% for item in data %}
+<div id="rpt{{loop.index}}" class='details_rpt_popup'>
+    <a class="b-close">x</a>
+    <div class="alert alert-info" style="margin:-18px -18px 18px -18px;border-radius:12px !important;">
+        <strong>Reported details</strong>
+    </div>
+    <div class="widget widget-full wgreen" style="max-height: 500px;overflow: auto">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                <tr>
+                    <th width="150">User</th>
+                    <th>Reason</th>
+                </tr>
+                </tr>
+            </thead>
+            {% for user_reported in item['user_reported'] %}
+            <tr>
+                <td>{{(user_reported['from'])}}</td>
+                <td width='500'>{{user_reported['msg']}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+{% endfor %}
+<!-- End Report details popup -->
+
+{% endblock %}

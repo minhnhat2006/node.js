@@ -1,0 +1,15 @@
+/* 
+    Document   : login
+    Created on : Feb 22, 2014, 4:05:05 AM
+    Author     : nathan
+    Description:
+        Purpose of the stylesheet follows.
+*/
+/* Login and Register form */
+.admin-form{
+    max-width: 500px;
+    margin: 50px auto;
+}
+.admin-form form{
+    padding: 10px 0px;
+}

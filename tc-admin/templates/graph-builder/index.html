@@ -1,0 +1,77 @@
+{% extends '../layout/default.html' %}
+{% import '../layout/pagination.html' as pagination %}
+{% import '../layout/commonMacros.html' as macros %}
+
+{% block head %}
+{% parent %}
+<script src="/tc/graph-builder.js"></script>
+{% endblock %}
+
+{% block content %}
+
+<table width=100% cellpadding=5 >
+    <tr>
+        <td width=100% valign=top>    
+            <h5 style="text-align:center">Un-Graphed Embrace Users</h5>
+            <span id="msg" style="color: #000FFF"></span>
+            <table class="table">
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>View</th>
+                    <th>Email</th>
+                    <th>Action</th>
+                </tr>
+                {% for item in data['data'] %}
+                <tr>
+                    <td>{{item['user']}}</td>
+                    <td>{{item['user_realname']}}</td>
+                    <td>{{item['subpath']}}</td>
+                    <td>{{item['user_email']}}</td>
+                    <td>
+                        <a id="link_{{item['user']}}" href="#" title=" Sync with grapth " aid="{{item['user']}}" class="_a_sync"><i class="icon icon-tasks"></i></a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </td>
+    </tr>
+</table>
+
+<table width=100% cellpadding=5 >
+    <tr>
+        <td width=100% valign=top>    
+            <h5 style="text-align:center">Add/Remove Embracing</h5>
+            <table class="table">
+                <tr>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Action</th>
+                </tr>
+                <tr>
+                    <td>
+                        <select id="from" name="from" style="width: 200px">
+                            <option value="A">Select User</option>
+                            {% for user in all_users %}
+                            <option value="{{user['user']}}">{{user['subpath']}}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td>
+                        <select id="to" name="to" style="width: 200px">
+                            <option value="A">Select User</option>
+                            {% for user in all_users %}
+                            <option value="{{user['user']}}">{{user['subpath']}}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td>
+                        <a id="embrace_btn" href="#" title="Add Embrace" aid=""><i class="icon icon-plus"></i></a>
+                        <a id="remove_embrace_btn" href="#" title="Remove Embrace" aid=""><i class="icon icon-minus"></i></a>
+                    </td>
+                </tr>
+
+            </table>
+        </td>
+    </tr>
+</table>

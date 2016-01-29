@@ -1,0 +1,80 @@
+{% extends '../layout/default.html' %}
+{% import '../layout/pagination.html' as pagination %}
+{% import '../layout/commonMacros.html' as macros %}
+
+{% block head %}
+{% parent %}
+{% js %}
+pw/scripts/admin/v2/collection.js
+{% endjs %}
+{% css %}
+pw/css/admin/v2/collection.css
+{% endcss %}
+{% endblock %}
+
+{% block content %}
+
+<input type="hidden" id='collection_id' value="{{collection['id']}}"/>
+<input type="hidden" id='weight' value="{{collection['weight']}}"/>
+
+<div class="widget widget-full wgreen">
+    <!-- Widget title -->
+    <div class="widget-head">
+        <div class="pull-left"><b>{{collection['title']}}</b>'s Media Items</div>
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="widget-content no-border">
+        <table id="tblItems" class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Index</th>
+                    <th>Type</th>
+                    <th>Name</th>
+                    <th style="width:85px" class="center">Action</th>
+                </tr>
+            </thead>
+            {% for item in data['data'] %}
+            <tr>
+                <td>{{loop.index}}</td>
+                <td>{{item['type']}}</td>        
+                <td>{{macros.prepareMediaView(item)}}</td>
+                <td class="center" mediaId="{{item['media_id']}}" mediaType="{{item['type']}}" weight="{{item['weight']}}" itemId="{{item['id']}}">
+                    <a class="move-first" style="cursor:pointer" title="Move to first"><i class="tc-icon tc-icon-upload"></i></a>
+                    <a class="move-up" style="cursor:pointer" title=" Move up "><i class="tc-icon tc-icon-arrow-up"></i></a>
+                    <a class="move-down" style="cursor:pointer" title=" Move down "><i class="tc-icon tc-icon-arrow-down"></i></a>
+                    <a class="move-last" style="cursor:pointer" title=" Move to last "><i class="tc-icon tc-icon-download"></i></a>
+                    <a class="move-to" style="cursor:pointer" title=" Move to index "><i class="tc-icon tc-icon-move"></i></a>
+                    <div class="item-line">
+                        <form class="form-inline frm-order">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Order" style="width:60px">
+                            </div>
+                            <button type="submit" class="btn btn-info btn-move">Move</button>
+                            <button class="btn btn-default btn-cancel">Cancel</button>
+                        </form>
+                    </div>
+                    <a class="remove-media" style="cursor:pointer" title=" Remove "><i class="tc-icon tc-icon-remove"></i></a>
+                    <a class="delete-media" style="cursor:pointer" title=" Delete "><i class="tc-icon tc-icon-trash"></i></a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="widget-foot no-border">
+        <div id="loadmore" style="display:none;">
+            <center>
+                <img src="{{STATIC_BASE}}/pw/images/loading.gif" />
+                <em>Loading ...</em>
+            </center>
+        </div>
+        <div class="clearfix"></div> 
+    </div>
+</div>
+
+<script type="text/javascript">
+    var totalItemsCount = {{data.rowTotal}};
+</script>
+
+{% endblock %}

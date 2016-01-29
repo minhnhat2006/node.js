@@ -1,0 +1,226 @@
+{% extends '../layout/default.html' %}
+{% import '../layout/pagination.html' as pagination %}
+{% import '../layout/commonMacros.html' as macros %}
+
+{% block head %}
+{% parent %}
+{% css %}
+pw/css/admin/v2/popbox.css
+pw/css/admin/v2/staffpick.css
+{% endcss %}
+{% js %}
+pw/scripts/admin/v2/staff-pick.js
+{% endjs %}
+{% endblock %}
+
+{% block content %}
+<script type="text/javascript">
+    <!--//
+    function change() {
+        document.filterform.submit();
+    }
+
+    //-->
+</script>
+<div>
+    <div class="widget widget-full wgreen">
+        <!-- Widget title -->
+        <div class="widget-head">
+            <div class="pull-left">Staff Picked Items</div>
+            <div class="pull-right">
+                <div id="filter_form">
+                    <form action='/staff-pick' id="staffpickform" method='GET' name="filterform" target="_self">
+                        <div align=right class="form-group">
+                            <select name="media_type" class="form-control user-search" id="staffpick_filter" onChange="change();">
+                                <option value="">Filter</option>
+                                <option value="0" {% if (type === 0 )%} selected {% endif %}>All</option>
+                                <option value="1" {% if (type === 1 )%} selected {% endif %}>Images</option>
+                                <option value="2" {% if (type === 2 )%} selected {% endif %}>Videos</option>
+                                <option value="3" {% if (type === 3 )%} selected {% endif %}>Musics</option>
+                                <option value="4" {% if (type === 4 )%} selected {% endif %}>Blogs</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <a href='#' class="staff_pick_settings"> Settings </a>|
+                <a href='#' class="staff_pick_remove"> Remove </a>|
+                <a href='#' class="staff_pick_shownow">Show Now </a> | 
+                <a href='#' class="staff_pick_reshow">Re-Show </a>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <div class="row queue-page">
+        <div class="col-md-full">
+            <div class="widget wseagreen">
+                <div class="widget-head">
+                    <div class="pull-left">Items to be shown</div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="widget-content referrer" id="staffpick_wait">
+                    <!-- Widget content -->
+                    <table class="table table-bordered" id="tblqueue">
+                        <tr>
+                            <th width=5><input type="checkbox" id="_select_all_queue" title=" Check all "></th>
+                            <th width=10>Index</th>
+                            <th width="150">Media id</th>
+                            <th width="600">Items to be shown</th>
+                        </tr>
+                        {% for item in notset %}
+                        <tr id='{{item['id']}}'>
+                            <td><input type="checkbox" name="data[]" value='{{helper.encodeJSONStaffPickMedia(item,false)}}' class="chk_cls_queue"></td>
+                             <td>{{loop.index}}</td>
+                             <td>{{item['id']}}</td>
+                             {% if item['staffPickType'] === "collection" %}
+                             <td>{{macros.prepareCollectionView(item)}}</td>
+                             {% else %}
+                             <td>{{macros.prepareMediaView(item)}}</td>
+                             {% endif %}
+                             <td></td>
+                         </tr>
+                         {% endfor %}
+                        </table>
+                        <div class="widget-foot no-border">
+                            <div id="loadmorequeue" style="display:none;">
+                                <center>
+                                    <img src="{{STATIC_BASE}}/pw/images/loading.gif" />
+                                    <em>Loading ...</em>
+                                </center>
+                            </div>
+                            <div class="clearfix"></div> 
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row half-page">
+            <div class="col-md-100">
+                <div class="widget wseagreen">
+                    <div class="widget-head">
+                        <div class="pull-left">Items already shown</div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="widget-content referrer" id="staffpick_shown">
+                        <!-- Widget content -->
+                        <table class="table table-bordered" id="tblactive">
+                            <tr>
+                                <th width=5><input type="checkbox" id="_select_all_shown" title=" Check all "></th>
+                                <th width=20>Index</th>
+                                <th width="150">Media id</th>
+                                <th width="500">Items already shown</th>
+                                <th width="200">Date shown</th>
+                            </tr>
+                            {% for item in set %}
+                            <tr id='{{item['id']}}' style="background: rgb(176, 187, 53);">
+                                <td><input type="checkbox" name="data[]" value='{{helper.encodeJSONStaffPickMedia(item,true)}}' class="chk_cls_shown"></td>
+                                <td>{{loop.index}}</td>
+                                <td>{{item['id']}}</td>
+                                {% if item['staffPickType'] === "collection" %}
+                                <td>{{macros.prepareCollectionView(item)}}</td>
+                                {% else %}
+                                <td>{{macros.prepareMediaView(item)}}</td>
+                                {% endif %}
+                                <td>{{item['last_updated']}}</td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                        <div class="widget-foot no-border">
+                            <div id="loadmoreshown" style="display:none;">
+                                <center>
+                                    <img src="{{STATIC_BASE}}/pw/images/loading.gif" />
+                                    <em>Loading ...</em>
+                                </center>
+                            </div>
+                            <div class="clearfix"></div> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="clearfix"></div>
+        <div class="row deleted-items">
+            <div class="col-md-100">
+                <div class="widget wslategrey">
+                    <div class="widget-head">
+                        <div class="pull-left">Deleted Items</div>
+                        <div class="widget-icons pull-right">
+                            <a href="#" class="wminimize showDeleted"><i class="icon-chevron-up"></i></a> 
+                            <a href="#" class="wclose"><i class="icon-remove"></i></a>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="widget-content referrer" id="stp_deleted">
+                        <!-- Widget content -->
+                        <table class="table table-bordered" id="tblDeleted">
+                            <thead>
+                                <tr>
+                                    <th width=5><input type="checkbox" id="_select_all_deleted" title=" Check all "></th>
+                                    <th width=20>Index</th>
+                                    <th width="500">Item</th>
+                                    <th width="200">Date deleted</th>
+                                    <th style="width:85px;" class="center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                        <div class="widget-foot no-border">
+                            <div id="loadmoreDeleted" style="display:none;">
+                                <center>
+                                    <img src="{{STATIC_BASE}}/pw/images/loading.gif" />
+                                    <em>Loading ...</em>
+                                </center>
+                            </div>
+                            <div class="clearfix"></div> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Begin Edit popup -->
+    <div id="settings_pop_up">
+        <a class="b-close">x</a>
+        <h6>Modify expire time and number of contents get updated</h6>
+        <form class="form-inline" style="margin-left:0px">
+                <div class="form-group">
+                    <div class="settings-info">
+                        <div class="show-inline">
+                            <div class="pull-left string">Expire Time : </div> 
+                            <input id="t_expire" type="number" name="t_expire" class="form-control staff-pick" value='{{expiretime}}' placeholder="Expire time">
+                            <select name="time_expire" class="form-control staff-pick" id="expire_time">
+                                <option value="1">Hours</option>
+                            </select>
+                        </div>
+                        <div class="show-inline">
+                            <div class="pull-left string full">Number of pieces : </div> 
+                            <div class ="number-pieces">
+                                <div class="pull-left string">Collections : </div> 
+                                <input id="t_number_collections" type="number" value='{{collectionsize}}' name="t_number_collections" class="form-control input-number" placeholder="Input number">
+                            </div>
+                            <div class="number-pieces">
+                                <div class="pull-left string">Single media : </div> 
+                                <input id="t_number_medias" type="number" value='{{mediasize}}' name="t_number_medias" class="form-control input-number" placeholder="Input number">
+                            </div>
+                        </div>
+                        <div class="show-inline">
+                            <div class="pull-left string">Remove after : </div> 
+                            <input id="rel_date" type="number" name="rel_date" class="form-control staff-pick" value='{{relsdate}}' placeholder="Release date">
+                            <select name="release_days" class="form-control staff-pick" id="release_days">
+                                <option value="1">Days</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="button-update">
+                    <button type='submit' id="update_settings" class='btn btn-info' >Update</button>
+                </div>
+
+            </form>
+        </div>
+        <!-- End Edit popup -->
+        {% endblock %}

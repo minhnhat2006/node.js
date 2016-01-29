@@ -1,0 +1,64 @@
+<html>
+    <head>
+        <title>Country Growth - Admin Control Panel</title>
+        <link rel='shortcut icon' href='{{STATIC_BASE}}/pw/images/favicon.ico'/>
+
+        <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css"/>
+        <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.2.0/css/datepicker.min.css"/>
+    </head>
+    <body>
+        <div style="border-bottom: 1px solid #ccc;padding: 20px;margin-bottom: 20px">
+            <div class="pull-right">
+                <form method="get" action="/report/country-growth">
+                    Date From: <input id="date-from" data-provide="datepicker" name="from" class="datepicker input-small" size="16" type="text" data-date-format="mm/dd/yyyy" value="{{dateFrom}}">
+                    Date To: <input id="date-to" data-provide="datepicker" name="to" class="datepicker input-small" size="16" type="text" data-date-format="mm/dd/yyyy" value="{{dateTo}}">
+                    <button class="btn btn-primary" type="submit">Show</button>
+                </form>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div >
+            <div id="chart_geo" style="clear:both;float:left;width: 1200px; height: 500px;"></div>
+            <div style="clear:both"></div>
+        </div>
+        <div style="margin-top: 30px">
+            <div style="font-size: 16px;font-weight:bold;color: #428BCA">User growth from {{dateFrom}} to {{dateTo}}</div>
+            <div id="chart_geo_old" style="float:left;width: 1200px; height: 500px;"></div>
+            <div style="clear:right;float:left;width:300px;height:500px">
+                <ul>
+                    {% for item in colorList %}
+                    <li style="background-color:{{item[1]}};padding: 2px;color:#fff;">{{item[0]}}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div style="clear:both"></div>
+        </div>
+        <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+        <script type='text/javascript' src='http://codeorigin.jquery.com/jquery-1.10.2.min.js'></script>
+        <script type='text/javascript' src='//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js'></script>
+        <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.2.0/js/bootstrap-datepicker.min.js'></script>
+        <script type="text/javascript">
+            google.load("visualization", "1", {packages: ["corechart", "geochart"]});
+            google.setOnLoadCallback(drawChart);
+            
+            function drawChart() {
+                drawRegionsMap('chart_geo', {{ JSON.stringify(countryGeo)}});
+                drawRegionsMap('chart_geo_old', {{JSON.stringify(oldGeo)}}, {{JSON.stringify(colorDataKeys)}}, {{JSON.stringify(colorDataValues)}});
+            }
+
+            function drawRegionsMap(id, data, value, color) {
+                var data = google.visualization.arrayToDataTable(data);
+                var theOptions = {};
+                if (value && color) {
+                    theOptions = {
+                        colorAxis: {values: value,
+                        colors: color}
+                    };
+                }
+
+                var chart = new google.visualization.GeoChart(document.getElementById(id));
+                chart.draw(data, theOptions);
+            }
+        </script>
+    </body>
+</html>

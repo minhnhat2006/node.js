@@ -1,0 +1,260 @@
+{#
+/**
+* Copyright (C) 2014 TallCat.com
+* 
+*  This file is part of TallCat Portal system developed
+*  by TallCat.com.
+* 
+*  PHP Version 1
+*  file: layout.phtml
+* 
+*package   Application_ADD_OTHER_HERE
+*author  nhatnguyen@tallcat.com
+*copyright 2010 TallCat.com
+*version   2.0
+*link  http://www.midas-solusi.com
+*since   Release: http://www.tallcat.com Apr 21, 2011 1:14:41 AM
+*/
+#}
+
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>{{title}}</title>
+        <meta charset="utf-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="keywords" content="">
+        <meta name="author" content="">
+
+        {% icon %}
+        pw/images/favicon.ico
+        {% endicon %}
+
+        {% block head %}
+        <!-- Stylesheets -->
+        {% css %}
+        pw/css/admin/v2/bootstrap.css
+        pw/css/admin/v2/font-awesome.css
+        pw/css/admin/v2/jquery-ui.css
+        pw/css/admin/v2/bootstrap-toggle-buttons.css
+        pw/css/admin/v2/widgets.css
+        pw/css/admin/v2/style.css
+        pw/vendor/bootstrap/css/bootstrap-notify.css
+        pw/scripts/admin/datepicker/css/datepicker.css
+        pw/vendor/tagedit/css/jquery.tagedit.css
+        pw/vendor/jquery.ui/autocomplete/smoothness.css
+        pw/css/admin/codemirror.css
+        {% endcss %}
+
+        <!-- Javascripts -->
+        {% js %}
+        pw/vendor/jquery/jquery-1.11.1.min.js
+        pw/vendor/jquery/autocomplete/jquery.autocomplete.js
+        pw/scripts/lib/jquery-ui.js
+        pw/scripts/lib/jquery.ui.widget.js
+        pw/scripts/lib/jquery.ui.draggable.min.js
+        pw/vendor/jquery/jquery.slimscroll.js
+        pw/scripts/admin/bootstrap.min.js
+        pw/vendor/bootstrap/js/bootstrap-notify.js
+        pw/scripts/admin/jquery.validate.js
+        pw/scripts/admin/v2/misc.modal.js
+        pw/scripts/admin/bootstrap-confirmation.js
+        pw/scripts/admin/ckeditor/ckeditor.js
+        pw/scripts/admin/ckeditor/adapters/jquery.js
+        pw/scripts/admin/datepicker/js/bootstrap-datepicker.js
+        pw/scripts/admin/codemirror.js
+        pw/scripts/admin/mode/javascript/javascript.js
+        pw/scripts/admin/beautify.js
+        pw/vendor/tagedit/js/jquery.tagedit.js
+        pw/vendor/tagedit/js/jquery.autoGrowInput.js
+        pw/scripts/admin/jquery.bpopup.min.js
+        pw/vendor/jquery/jquery.base64.js
+        pw/vendor/xregexp/xregexp-min.js
+        pw/scripts/admin/v2/tallcat.admin.js
+        pw/scripts/admin/v2/base.js
+        pw/scripts/admin/v2/home.js
+        pw/scripts/creativ-portal.js
+        {% endjs %}
+
+        <!-- HTML5 Support for IE -->
+        <!--[if lt IE 9]>
+        <script src="/js/html5shim.js"></script>
+        <![endif]-->
+
+        <script src="/socket.io/socket.io.js"></script>
+        {% endblock %}
+    </head>
+    <body>
+        <div class="navbar navbar-inverse navbar-fixed-top bs-docs-nav" role="banner">
+            <div class="containerk">
+                <!-- Menu button for smallar screens - removed -->
+                <div class="navbar-header">
+                    <a href="/stats" class="navbar-brand">
+                        <span class="bold">Admin Control Panel</span>
+                    </a>
+                </div>
+                <!-- Site name for smallar screens -->
+                <!-- Navigation starts -->
+                <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation"> 
+                    <!-- Account -->
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                <img src="{{userInfo.avatar}}" alt="" class="nav-user-pic img-responsive" />  {{userInfo.user_realname}} <b class="caret"></b>
+                            </a>
+
+                            <!-- Dropdown menu -->
+                            <ul class="dropdown-menu">
+                                <li><a id="logout" href="/logout"><i class="icon-off"></i> Logout</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <!-- Links -->
+                    <ul class="nav navbar-nav navbar-right">
+                        <!-- Report -->
+                        <li>
+                            <a class="dropdown-toggle" href="/report" target="_blank">
+                                <i class="icon-picture"></i> Report
+                            </a>
+                        </li>
+
+                        <!-- Registered Country Growth -->
+                        <li>
+                            <a class="dropdown-toggle" href="/report/country-growth" target="_blank">
+                                <i class="icon-arrow-up"></i>  Country Growth
+                            </a>
+                        </li> 
+
+                        <!-- Registered Country list -->
+                        <li>
+                            <a class="dropdown-toggle" href="/report/country-list" target="_blank">
+                                <i class="icon-flag"></i>  Country List
+                            </a>
+                        </li> 
+
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Main content starts -->
+        <div class="content">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <div class="sidebar-dropdown"><a href="#">Navigation</a></div>
+                <div class="sidebar-inner">
+                    <!-- Search form -->
+                    <div class="sidebar-widget">
+                        <div class="search-box">
+                            <div class="input-append">
+                                <input type="text" placeholder="Search here..." name="q" size="50" class="search-criteria form-control">
+                            </div>
+                            <span class="search-type">
+                                <input type="radio" name="search-group" checked value="user" id="sUser"><label for="sUser">User&nbsp;&nbsp;</label>
+                                <input type="radio" name="search-group" value="blog" id="sBlog"><label for="sBlog">Blog</label>
+                                <input type="radio" name="search-group" value="photo" id="sPhoto"><label for="sPhoto">Photo</label>
+                                <br>
+                                <input type="radio" name="search-group" value="video" id="sVideo"><label for="sVideo">Video</label>
+                                <input type="radio" name="search-group" value="music" id="sMusic"><label for="sMusic">Music</label>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!--- Sidebar navigation -->
+                    <!-- If the main navigation has sub navigation, then add the class "has_submenu" to "li" of main navigation. -->
+                    <ul class="navi">
+                        <!-- Use the class nred, ngreen, nblue, nlightblue, nviolet or norange to add background color. You need to use this in <li> tag. -->
+                        <li id="_stats" class="has_submenu nlightblue">
+                            <a href="/stats"><i class="icon icon-signal"></i><span>Statistic</span><span class="pull-right"><i class="icon-angle-right"></i></span></a>
+                            <ul>
+                                <li id="_content-upload-by-day"><a href="/stats/content-upload-by-day"><i class="icon icon-list-alt"></i><span>Content Upload by day</span></a></li>
+                            </ul>
+                        </li>
+                        <li id="_user" class="nlightblue"><a href="/user"><i class="icon icon-user"></i><span>User manager</span></a></li>
+                        <!--li id="_collection" class="nlightblue"><a href="/collection"><i class="icon icon-user"></i><span>Collection Manager</span></a></li-->
+                        <li id="_curated" class="has_submenu nlightblue">
+                            <a href=""><i class="icon icon-signal"></i><span> Curated Contents</span><span class="pull-right"><i class="icon-angle-right"></i></span></a>
+                            <ul>
+                                <li id="_movement" class="nlightblue"><a href="/creative-movement"><i class="icon icon-off"></i><span> Creative Movement</span></a></li>
+                                <li id="_staff-pick" class="nlightblue"><a href="/staff-pick"><i class="icon icon-flag"></i><span> Staff Pick</span></a></li>
+                                <li id="_trending-collection" class="nlightblue"><a href="/collection/trending-collection"><i class="icon icon-flag"></i><span> Trending collection</span></a></li>
+                            </ul>
+                        </li>
+                        <li id="_filter-builder" class="nlightblue"><a href="/filter-builder"><i class="icon icon-edit"></i><span>Filter Builder</span></a></li>
+                        <li id="_change" class="nlightblue"><a href="/change"><i class="icon icon-user"></i><span>Wristband Registration</span></a></li>
+                        <li id="_blog" class="nlightblue"><a href="/blog" ><i class="icon icon-book"></i><span> Blog manager</span></a></li>
+                        <li id="_comment" class="nlightblue"><a href="/comment"><i class="icon icon-list-alt"></i><span>Comment Manager</span></a></li>
+                        <li id="_mass-mailer" class="nlightblue"><a href="/mass-mailer"><i class="icon icon-envelope"></i><span>Mass Mailer</span></a></li>
+                        <!--li id="_approval" class="nlightblue"><a href="/approval"><i class="icon icon-check"></i><span>Waiting for approval</span></a></li-->
+                        <li id="_flag-queue" class="nlightblue"><a href="/flag-queue"><i class="icon icon-flag"></i><span>Flag Queue</span></a></li>
+                        <li id="_flag-message" class="nlightblue"><a href="/flag-message"><i class="icon icon-flag"></i><span>Flag Message</span></a></li>
+                        <li id="_system-notification" class="nlightblue"><a href="/notifications"><i class="icon icon-bell"></i><span>System Notifications</span></a></li>
+                        <li id="_gathering-manager" class="nlightblue"><a href="/gathering-manager"><i class="icon icon-flag"></i><span>Gathering Manager</span></a></li>
+                        <li id="_gathering-reported" class="nlightblue"><a href="/gathering-reported"><i class="icon icon-flag"></i><span>Gathering Reported</span></a></li>
+                        <li id="_viral" class="nlightblue"><a href="/viral"><i class="icon icon-picture"></i><span>Viral</span></a></li>
+                        <!--li id="_console" class="nlightblue"><a href="/console"><i class="icon icon-fire"></i><span>RestAPI Console</span></a></li>-->
+                        <!--li id="_example" class="nred"><a href="/example" target="_blank"><i class="icon icon-picture"></i><span>Metro King theme</span></a></li>-->
+                        <!-- colors(classes): nred, nblue, ngreen, norange, nlightblue, nviolet -->
+                    </ul>
+                </div>
+            </div>
+            <!-- Sidebar ends -->
+
+            <!-- Main bar -->
+            <div class="mainbar">
+                <!-- Page heading -->
+                <div class="page-head">
+                    <!-- Page heading -->
+                    <h3 class="pull-left">{{orgTitle}}
+                        <!-- page meta -->
+                        <span class="page-meta">{{desc}}</span>
+                    </h3>
+                    <!-- Breadcrumb -->
+                    <div class="bread-crumb pull-right">
+                        <a href="/stats"><i class="icon-home"></i> Home</a> 
+                        <!-- Divider -->
+                        {% for item in breadcrumbs %}
+                        <span class="divider">/</span> 
+                        <a href="{% if loop.last %} # {% else %}{{ helper.getPageBreadcrumbPath(item.path, item.id, requestParams, pageBreadcrumb) }}{% endif %}"
+                           class="bread-{% if loop.last %}current{% else %}crumb{% endif %}">{{item.title}}</a>
+                        {% endfor %}
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <!-- Page heading ends -->
+                <!-- body content -->
+                <div id="content" class="matter">
+                    <div class="container" style="max-width:100%">
+                        {% block content %}{% endblock %}
+                    </div>
+                </div>
+                <!-- end body content -->
+            </div><!-- Mainbar ends -->
+            <div class="clearfix"></div>
+        </div><!-- Content ends -->
+        <!-- Scroll to top thingy -->
+        <span class="totop"><a href="#"><i class="icon-chevron-up"></i></a></span> 
+        <footer>
+            <div class="logo pull-right" style="margin-top: 0px;"></div>
+        </footer>
+        <div id="flascontainer" style="display:none">
+            <div id="flashmessage" >{{flashmessage}}</div>
+        </div>
+        <input type="hidden" id="controller" value="{{controller}}"/>
+        <input type="hidden" id="action" value="{{action}}"/>
+
+        <!-- Begin Waiting popup -->
+        <div id="waitingPopup" style="display:none">
+            <img src="{{STATIC_BASE}}/pw/images/admin_waiting.gif"/>
+        </div>
+        <!-- End Waiting popup -->
+    </body>
+
+    <script type="text/javascript">
+        window.creativStaticUrl = '{{STATIC_BASE}}';
+        window.creativUploadUrl = 'http://{{API_HOST}}/admin/upload';
+    </script>
+</html>

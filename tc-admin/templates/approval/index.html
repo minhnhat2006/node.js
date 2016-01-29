@@ -1,0 +1,53 @@
+{% extends '../layout/default.html' %}
+{% import '../layout/pagination.html' as pagination %}
+
+{% block head %}
+{% parent %}
+{% js %}
+pw/scripts/admin/v2/approval.js
+{% endjs %}
+{% endblock %}
+
+{% block content %}
+<div class="widget widget-full wblue">
+    <!-- Widget title -->
+    <div class="widget-head">
+        <div class="pull-left">Accounts</div>
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="widget-content no-border">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th width=5><input type="checkbox" id="_select_all" title=" Check all "></th>
+                    <th>Email</th>
+                    <th>Registration date</th>
+                    <th width=50>Action</th>
+                </tr>
+            </thead>
+            {% for item in data['data'] %}
+            <tr>
+                <td>
+                    <input type="checkbox" name="email[]" value="{{item['email']}}" class="approve_chk_cls" id="email_{{loop.index}}">
+                </td>
+                <td>{{item['email']}}</td>
+                <td>{{item['register_date']}}</td>
+                <td>
+                    <a href="#" title="Approve" aid="{{loop.index}}" class="aprove_a_cls"><i class="tc-icon tc-icon-thumbs-up"></i></a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="widget-foot no-border">
+        {{pagination.paginationControl(data)}}
+        <div class="clearfix"></div> 
+    </div>
+</div>
+
+<div align=right style="margin: 10px 0px 10px 0px">
+    <button type='button' class="btn btn-primary" id="btn_approve">Submit</button>
+</div> 
+{% endblock %}

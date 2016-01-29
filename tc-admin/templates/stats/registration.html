@@ -1,0 +1,64 @@
+{% extends '../layout/default.html' %}
+{% import '../layout/pagination.html' as pagination %}
+{% import '../layout/commonMacros.html' as macros %}
+
+{% block head %}
+{% parent %}
+{% css %}
+pw/css/admin/v2/stats.css
+{% endcss %}
+{% endblock %}
+
+{% block content %}
+
+<div class="widget widget-full wgreen">
+    <!-- Widget title -->
+    <div class="widget-head">
+        <div class="pull-left" style="margin-top:5px">Users</b></div>
+        <div class="pull-right">
+            <form id="registration_form" method="GET" action="/stats/registration">
+                <div align=right class="form-group">
+                    <label>From: </label>
+                    <input id="date-from" name="from" type="text" data-date-format="yyyy-mm-dd" value="{{from}}" class="form-control user-search datepicker input-small">
+                    <label>To: </label>
+                    <input id="date-to" name="to" type="text" data-date-format="yyyy-mm-dd" value="{{to}}" class="form-control user-search datepicker input-small">
+                    <button id="reg-search-date" class="btn btn-primary" type="submit">Search</button>
+                    <button class="btn btn-default" type="button" onclick="window.location = '/stats/registration-hour';">List by hour(s)</button>
+                </div>
+            </form>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="widget-content no-border">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Index</th>
+                    <th width="250">User</th>        
+                    <th>User status</th>
+                    <th>User type</th>
+                    <th>User created</th>
+                    <th>User last login</th>
+                </tr>
+            </thead>
+            {% for user in user_list %}
+            <tr>
+                <td>{{loop.index}}</td>
+                <td>{{macros.prepareUserView(user)}}</td>
+                <td>{{ user['user_status']}}</td>
+                <td>{{ user['user_type']}}</td>
+                <td>{{ user['created']}}</td>
+                <td>{{ user['last_login']}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="widget-foot no-border">
+        {{pagination.paginationControl(data)}}
+        <div class="clearfix"></div> 
+    </div>
+</div>
+
+{% endblock %}
